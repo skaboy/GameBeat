@@ -1,5 +1,7 @@
 //package com.example.gamebeat;
-//
+/**
+ * Not used class
+ **/
 //
 //import android.content.Context;
 //import android.database.DataSetObserver;
