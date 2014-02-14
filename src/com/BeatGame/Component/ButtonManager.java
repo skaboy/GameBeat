@@ -10,7 +10,7 @@ public class ButtonManager {
 	ArrayList<BeatButton> buttonList;
 	Context context;
 	int buttonID;
-	
+
 	public ButtonManager(Context context){
 		this.context = context;
 		buttonList = new ArrayList<BeatButton>();
@@ -26,7 +26,7 @@ public class ButtonManager {
 		buttonList.add( new BeatButton(this.context, this.buttonID, size, position, image, circle));
 		return buttonID;
 	}
-	
+
 	public int deleteButton(int id){
 		for (BeatButton button : buttonList){
 			if (button.id == id) buttonList.remove(button); 
