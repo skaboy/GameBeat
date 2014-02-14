@@ -8,13 +8,22 @@ import android.view.Menu;
 import com.BeatGame.Management.R;
 
 public class GameManager extends Activity {
+	
+	private int speed;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.game_manager);
 		Intent intent = getIntent();
-		System.out.println(intent.getStringExtra("level"));
+        String level =intent.getStringExtra("level");
+        if(level.equals(SetupManager.level.easy)){
+        	speed=0;
+        }else if (level.equals(SetupManager.level.normal)){
+        	speed=1;
+        }else if(level.equals(SetupManager.level.hard)){
+        	speed=2;
+        }
 	}
 
 	@Override
