@@ -37,9 +37,6 @@ public class SetupManager extends Activity {
 				 
 				// find the radiobutton by returned id
 			        radio = (RadioButton) findViewById(selectedId);
-	 
-//				Toast.makeText(SetupManager.this,
-//					radio.getText(), Toast.LENGTH_SHORT).show();
 			        Intent intent = new Intent(SetupManager.this,GameManager.class);
 			        if(radio.getText().equals("Easy")){
 			        	intent.putExtra("level", level.easy.toString());
@@ -47,7 +44,7 @@ public class SetupManager extends Activity {
 			        else if(radio.getText().equals("Normal")){
 			        	intent.putExtra("level", level.normal.toString());
 			        }else if(radio.getText().equals("Hard")){
-			        	intent.putExtra("level", level.easy.toString());
+			        	intent.putExtra("level", level.hard.toString());
 			        }
 			        startActivity(intent);
 			}
@@ -55,7 +52,6 @@ public class SetupManager extends Activity {
 		
 		
 		Button exit= (Button) findViewById(R.id.exit);
-		
 		exit.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -64,14 +60,6 @@ public class SetupManager extends Activity {
 				
 			}
 		});
-		
-//		Button butNormal = (Button) findViewById(R.id.radioNormal);
-//		LinearLayout layout = (LinearLayout) findViewById(R.id.layout);
-//		layout.addView(butNormal);
-//		Button butEasy = (Button) findViewById(R.id.radioEasy);
-//		layout.addView(butEasy);
-//		Button butHard = (Button) findViewById(R.id.radioHard);
-//		layout.addView(butHard);
 	}
 
 }

@@ -12,6 +12,18 @@ import com.BeatGame.Animation.MyAnimationView;
 import com.BeatGame.Management.R;
 
 public class GameManager extends Activity {
+	
+	//Speed of the game
+	private int speed;
+	
+	//SetupManager.level enum
+	private String level;
+	
+	//The current score
+	private int score;
+	
+	
+	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +42,15 @@ public class GameManager extends Activity {
                 animView.startAnimation();
             }
         });
+		level =intent.getStringExtra("level");
+		System.out.println(level);
+        if(level.equals(SetupManager.level.easy)){
+        	speed=0;
+        }else if (level.equals(SetupManager.level.normal)){
+        	speed=1;
+        }else if(level.equals(SetupManager.level.hard)){
+        	speed=2;
+        }
 	}
 
 	@Override
@@ -37,6 +58,16 @@ public class GameManager extends Activity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.game_manager, menu);
 		return true;
+	}
+	
+	
+	public String level(){
+		return level;
+	}
+	
+	
+	public void setLevel(String lvl){
+		level=lvl;
 	}
 
 }
