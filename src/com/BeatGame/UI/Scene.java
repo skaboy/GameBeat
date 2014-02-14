@@ -35,21 +35,21 @@ public class Scene implements SceneInterface {
     }
 
     @Override
-    public boolean setButtonAt(BeatButton b, Position p) {
-        if ( !isOverlapping(b,p) ) {
-            buttonsMap.put(b, p);
+    public boolean setButton(BeatButton b) {
+        if ( !isOverlapping(b) ) {
+            buttonsMap.put(b, b.position());
             return true;
         }
         return false;
     }
 
     @Override
-    public boolean setButtonListAt(List<BeatButton> bl, List<Position> pl) {
-        assert (bl.size() == pl.size());
-       /* for (int i=0 ; i < bl.size() ; i++){
-            setButtonAt(bl.get(i), pl.get(i));
-        }*/
-        return false;
+    public boolean setButtonList(List<BeatButton> bl) {
+        boolean ok = false;
+        for (int i=0 ; i < bl.size() ; i++){
+            ok &= setButton( bl.get(i) );
+        }
+        return ok;
     }
 
     @Override
@@ -65,15 +65,16 @@ public class Scene implements SceneInterface {
         return -1; // mean there is not button
     }
 
-    private boolean isOverlapping(BeatButton b, Position p){
+    private boolean isOverlapping(BeatButton b){
         // calculus : check two centers
 
         boolean overlap = false ;
-        int air1; Position pos;
+        Position p = b.position();
+        Position pos; int radius;
         for (BeatButton key : buttonsMap.keySet()) {
-            air1 = key.size();
+            radius = key.size();
             pos = buttonsMap.get(key);
-            overlap |=  collisionBetweenCircles(pos.x(), pos.y(), air1, p.x(), p.y(), b.size());
+            overlap &=  collisionBetweenCircles(pos.x(), pos.y(), radius, p.x(), p.y(), b.size());
         }
         return overlap;
     }

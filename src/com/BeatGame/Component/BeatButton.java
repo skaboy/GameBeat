@@ -32,7 +32,7 @@ public class BeatButton extends Button{
         return size;
     }
     
-    public Position getPosition(){
+    public Position position(){
     	return this.position;
     }
 

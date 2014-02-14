@@ -16,10 +16,10 @@ public interface SceneInterface {
     public void setSceneDimension(int h, int w);
 
      //check the size of the button and place it in the layout
-     public boolean setButtonAt(BeatButton b, Position p);
+     public boolean setButton(BeatButton b);
 
     //same as setButtonAt but accept list
-    public boolean setButtonListAt( List<BeatButton> bl, List<Position> pl);
+     public boolean setButtonList(List<BeatButton> bl);
 
     // return ID button
     public int isButtonAt(Position pos);
