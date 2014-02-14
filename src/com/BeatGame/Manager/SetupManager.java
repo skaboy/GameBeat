@@ -9,6 +9,8 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 import com.BeatGame.Management.R;
 
@@ -60,4 +62,5 @@ public class SetupManager extends Activity {
 //		Button butHard = (Button) findViewById(R.id.radioHard);
 //		layout.addView(butHard);
 	}
+
 }
