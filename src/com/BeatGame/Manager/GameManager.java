@@ -27,6 +27,7 @@ public class GameManager extends Activity {
 		setContentView(R.layout.game_manager);
 		Intent intent = getIntent();
 		level =intent.getStringExtra("level");
+		System.out.println(level);
         if(level.equals(SetupManager.level.easy)){
         	speed=0;
         }else if (level.equals(SetupManager.level.normal)){
