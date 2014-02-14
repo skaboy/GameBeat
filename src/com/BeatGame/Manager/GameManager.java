@@ -1,6 +1,7 @@
 package com.BeatGame.Manager;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 
@@ -12,6 +13,8 @@ public class GameManager extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.game_manager);
+		Intent intent = getIntent();
+		System.out.println(intent.getStringExtra("level"));
 	}
 
 	@Override
