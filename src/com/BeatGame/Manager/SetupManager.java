@@ -1,4 +1,4 @@
-package com.BeatGame.Component;
+package com.BeatGame.Manager;
 
 import android.app.Activity;
 import android.os.Bundle;import com.BeatGame.Management.R;
