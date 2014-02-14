@@ -6,7 +6,7 @@ import android.widget.Button;
 
 public class BeatButton extends Button{
 	
-	int id, size;
+	private int id, size;
 	Position position;
 	Image image;
 	Circle circle;
@@ -24,12 +24,16 @@ public class BeatButton extends Button{
 		this.circle = circle;
 	}
 
-    final public int id(){
+    public int id(){
         return id;
     }
 
-    final public int size(){
+    public int size(){
         return size;
+    }
+    
+    public Position getPosition(){
+    	return this.position;
     }
 
     @Override
