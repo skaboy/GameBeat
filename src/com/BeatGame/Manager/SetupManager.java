@@ -38,7 +38,7 @@ public class SetupManager extends Activity {
 //				Toast.makeText(SetupManager.this,
 //					radio.getText(), Toast.LENGTH_SHORT).show();
 			        
-				
+			
 			}
 		});
 		
