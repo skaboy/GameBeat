@@ -9,14 +9,24 @@ import com.BeatGame.Management.R;
 
 public class GameManager extends Activity {
 	
+	//Speed of the game
 	private int speed;
+	
+	//SetupManager.level enum
+	private String level;
+	
+	//The current score
+	private int score;
+	
+	
+	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.game_manager);
 		Intent intent = getIntent();
-        String level =intent.getStringExtra("level");
+		level =intent.getStringExtra("level");
         if(level.equals(SetupManager.level.easy)){
         	speed=0;
         }else if (level.equals(SetupManager.level.normal)){
@@ -31,6 +41,16 @@ public class GameManager extends Activity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.game_manager, menu);
 		return true;
+	}
+	
+	
+	public String level(){
+		return level;
+	}
+	
+	
+	public void setLevel(String lvl){
+		level=lvl;
 	}
 
 }
