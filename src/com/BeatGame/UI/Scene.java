@@ -10,6 +10,7 @@ import android.widget.RelativeLayout;
 
 import com.BeatGame.Component.BeatButton;
 import com.BeatGame.Component.Position;
+import com.BeatGame.Management.R;
 
 public class Scene implements SceneInterface {
 
@@ -94,10 +95,10 @@ public class Scene implements SceneInterface {
     
     public boolean drawButton(BeatButton button, Context context, RelativeLayout  layout){
     	
-
     	RelativeLayout.LayoutParams params;
     	
-        button.setText("Button");
+        button.setText("1");
+        button.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.round_button));
         params = new RelativeLayout.LayoutParams(button.size(),button.size());
         params.leftMargin = button.position().x();
         params.topMargin = button.position().y();
@@ -105,11 +106,16 @@ public class Scene implements SceneInterface {
     	Log.e("Draw button","button");
         
         layout.addView(button, params);
-        
-            	
+                    	
     	return true;
     }
     
+    public boolean removeButton(BeatButton button , Context context, RelativeLayout layout){
+    	
+    	layout.removeView(button);
+    	
+    	return true;
+    }
     
    
 }

@@ -2,18 +2,17 @@ package com.BeatGame.Animation;
 
 import java.util.ArrayList;
 
-import android.R.anim;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
 import android.graphics.RadialGradient;
 import android.graphics.Shader;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
+import android.util.Log;
 import android.view.View;
 
+import com.BeatGame.Component.Position;
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
@@ -25,18 +24,20 @@ public class MyAnimationView extends View implements ValueAnimator.AnimatorUpdat
         private static final float BALL_SIZE = 100f;
         private static final int DURATION = 3500;
 
-        public final ArrayList<ShapeHolder> balls = new ArrayList<ShapeHolder>();
+        public ArrayList<ShapeHolder> balls = new ArrayList<ShapeHolder>();
         AnimatorSet animation = null;
         Animator bounceAnim = null;
         ShapeHolder ball = null;
-
+        
+        int abc = 10;
+        
         public MyAnimationView(Context context) {
             super(context);
             
         }
 
         private void createAnimation() {
-            if (bounceAnim == null) {
+            //if (bounceAnim == null) {
                 //ShapeHolder ball;
                /* ball = balls.get(0);
                ObjectAnimator yBouncer = ObjectAnimator.ofFloat(ball, "y",
@@ -62,9 +63,9 @@ public class MyAnimationView extends View implements ValueAnimator.AnimatorUpdat
 	                PropertyValuesHolder pvhH = PropertyValuesHolder.ofFloat("height", ball.getHeight(),
 	                        ball.getHeight() / 2);
 	                PropertyValuesHolder pvTX = PropertyValuesHolder.ofFloat("x", ball.getX(),
-	                        ball.getX() + BALL_SIZE/2f);
+	                        ball.getX()+25);
 	                PropertyValuesHolder pvTY = PropertyValuesHolder.ofFloat("y", ball.getY(),
-	                        ball.getY() + BALL_SIZE/2f);
+	                        ball.getY()+25);
 	                ObjectAnimator whxyBouncer = ObjectAnimator.ofPropertyValuesHolder(ball, pvhW, pvhH,
 	                        pvTX, pvTY).setDuration(DURATION);
 	                //whxyBouncer.setRepeatCount(1);
@@ -88,22 +89,36 @@ public class MyAnimationView extends View implements ValueAnimator.AnimatorUpdat
                 bounceAnim = new AnimatorSet();
                 ((AnimatorSet)bounceAnim).playTogether( listAnimator
                         );
+
                 
                 
-            }
+          //  }
         }
 
-        public void startAnimation() {
-        	if(balls.size()==0){
-	        	addBall(50, 10);
-	            addBall(150, 60);
+        public void startAnimation(ArrayList<Position> positions) {
+        		balls.clear();
+        		for(Position pos : positions){
+        			addBall(pos.x()-25, pos.y()-25);
+        		}
+/*        		
+        		addBall(abc, y);
+        		addBall(150, 60);
 	            addBall(250, 50);
 	            addBall(350, 80);
 	            addBall(450, 80);
 	            addBall(650, 80);
-        	}
+*/        	
+        	for(ShapeHolder ball: balls){
+	        		ball.setAlpha(50);
+	     	}
+        
             createAnimation();
             bounceAnim.start();
+        }
+        
+        public void configureAddBall(int x, int y){
+        	
+        	addBall(x, y);
         }
 
         private ShapeHolder addBall(float x, float y) {
@@ -125,7 +140,7 @@ public class MyAnimationView extends View implements ValueAnimator.AnimatorUpdat
             paint.setShader(gradient);
             //paint.setColor(android.R.color.transparent);
             
-            
+           
             shapeHolder.setPaint(paint);
             balls.add(shapeHolder);
             return shapeHolder;
@@ -140,8 +155,12 @@ public class MyAnimationView extends View implements ValueAnimator.AnimatorUpdat
             }
         }
 
+        public void hideView(int id){
+        	balls.get(id).setAlpha(0);
+        }
+        
         public void onAnimationUpdate(ValueAnimator animation) {
-            invalidate();
+        	invalidate();
         }
 
     }
