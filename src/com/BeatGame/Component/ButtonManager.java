@@ -36,8 +36,10 @@ public class ButtonManager {
 	//delete a BeatButton in the buttonList
 	public int deleteButton(int id){
 		for (BeatButton button : buttonList){
-			if (button.id == id) buttonList.remove(button); 
+			if (button.id() == id) buttonList.remove(button); 
 		}
 		return 0;
 	}
+	
+	
 }
