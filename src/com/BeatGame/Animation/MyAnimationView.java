@@ -1,7 +1,6 @@
 package com.BeatGame.Animation;
 
 import java.util.ArrayList;
-
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -18,6 +17,8 @@ import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
 import com.nineoldandroids.animation.PropertyValuesHolder;
 import com.nineoldandroids.animation.ValueAnimator;
+
+import java.util.ArrayList;
 
 public class MyAnimationView extends View implements ValueAnimator.AnimatorUpdateListener {
 

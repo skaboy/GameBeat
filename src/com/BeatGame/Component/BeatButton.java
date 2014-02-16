@@ -11,7 +11,7 @@ public class BeatButton extends Button{
 	Image image;
 	Circle circle;
 
-	public BeatButton(Context context, int id, int size, Position position, Image image, Circle circle) {
+	public BeatButton(Context context, int id, int size, Position position, Circle circle) {
 
         // TODO : size need to be calculate according to the given picture
         // or we have to agree that all the used picture have the same size and define constant when this
@@ -20,7 +20,7 @@ public class BeatButton extends Button{
 		this.id = id;
 		this.size = size;
 		this.position = position;
-		this.image = image;
+		//this.image = image; // should provide default image
 		this.circle = circle;
 	}
 
@@ -33,9 +33,16 @@ public class BeatButton extends Button{
     }
     
     public Position position(){
-    	return this.position;
+    	return position;
     }
 
+    public Circle circle(){
+        return circle;
+    }
+
+    public void setImage(Image i) {
+        image = i;
+    }
     @Override
     public int hashCode() {
         return new Integer(id).hashCode();

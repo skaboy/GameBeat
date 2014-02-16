@@ -10,6 +10,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import com.BeatGame.Management.R;
+import com.BeatGame.UI.SceneTest;
 
 /**
  * Created by Franck on 07/02/14.
@@ -20,7 +21,11 @@ public class SetupManager extends Activity {
 	
 	private RadioGroup radioLevel;
 	private RadioButton radio;
+
 	public void onCreate(Bundle savedInstanceState) {
+
+        //SceneTest sc = new SceneTest(this); // Some Debug, let it comment
+
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.setup_manager);
 		radioLevel= (RadioGroup) findViewById(R.id.radioLevel);

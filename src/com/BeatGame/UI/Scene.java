@@ -3,10 +3,10 @@ package com.BeatGame.UI;
 
 import java.util.HashMap;
 import java.util.List;
-
 import android.content.Context;
 import android.util.Log;
 import android.widget.RelativeLayout;
+import android.content.Context;
 
 import com.BeatGame.Component.BeatButton;
 import com.BeatGame.Component.Position;
@@ -16,7 +16,17 @@ public class Scene implements SceneInterface {
 
     int width = 0;
     int height = 0;
+    Context context;
     HashMap<BeatButton, Position> buttonsMap = new HashMap<BeatButton, Position>() ;
+
+    // @ctor
+    public Scene(Context ctx, int h, int w) {
+        width = w;
+        height = h;
+        context = ctx;
+        buttonsMap = new HashMap<BeatButton, Position>() ;
+        System.out.println("Scene constructed and return !");
+    }
 
     @Override
     public int sceneWidth() {
@@ -36,6 +46,7 @@ public class Scene implements SceneInterface {
 
     @Override
     public boolean setButton(BeatButton b) {
+        System.out.println("About to set a button");
         if ( !isOverlapping(b) ) {
             buttonsMap.put(b, b.position());
             return true;
@@ -45,7 +56,7 @@ public class Scene implements SceneInterface {
 
     @Override
     public boolean setButtonList(List<BeatButton> bl) {
-        boolean ok = false;
+        boolean ok = true;
         for (int i=0 ; i < bl.size() ; i++){
             ok &= setButton( bl.get(i) );
         }
@@ -72,9 +83,7 @@ public class Scene implements SceneInterface {
         Position p = b.position();
         Position pos; int radius;
         for (BeatButton key : buttonsMap.keySet()) {
-            radius = key.size();
-            pos = buttonsMap.get(key);
-            overlap |=  collisionBetweenCircles(pos.x(), pos.y(), radius, p.x(), p.y(), b.size());
+            overlap |=  collisionBetweenCircles(b,key);
         }
         return overlap;
     }
@@ -87,12 +96,20 @@ public class Scene implements SceneInterface {
     }
 
     // calculate if there is collision between C1 and C2 where C1 is x, y and its air.
-    private boolean collisionBetweenCircles(int x, int y, int radius1, int a, int b, int radius2) {
+    private boolean collisionBetweenCircles(BeatButton b1, BeatButton b2) {
         // is the distance between two centers bigger than the sum of their air
+        int x = b1.position().x();
+        int y = b1.position().y();
+        int radius1 = b1.size();
+
+        int a = b2.position().x();
+        int b = b2.position().y();
+        int radius2 = b2.size();
+
         int d2 = (x-a)*(x-a) + (y-b)*(y-b);
         return (d2 < (radius1 + radius2)*(radius1 + radius2)); // return true if there is collision
     }
-    
+
     public boolean drawButton(BeatButton button, Context context, RelativeLayout  layout){
     	
     	RelativeLayout.LayoutParams params;
@@ -109,7 +126,7 @@ public class Scene implements SceneInterface {
                     	
     	return true;
     }
-    
+ 
     public boolean removeButton(BeatButton button , Context context, RelativeLayout layout){
     	
     	layout.removeView(button);
@@ -117,5 +134,8 @@ public class Scene implements SceneInterface {
     	return true;
     }
     
-   
+    public int buttonsMapSize() {
+        return buttonsMap.size();
+    }
+
 }

@@ -24,16 +24,12 @@ public class GameManager extends Activity {
 
 	// Speed of the game
 	private int speed;
-
-	// SetupManager.level enum
-	private String level;
-
-	// The current score
+	private String level; // SetupManager.level should be an enum
 	private int score;
 	private ButtonManager buttonManager;
 	private Scene sceneManager;
 	private RelativeLayout container;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -46,13 +42,10 @@ public class GameManager extends Activity {
 		container.addView(animView);
 
 		buttonManager = new ButtonManager(this);
+		buttonManager.createButton(new Position(10, 0), 50, 100, 2000);
+		buttonManager.createButton(new Position(80, 80), 50, 130, 2000);
 
-		buttonManager.createButton(50, new Position(10, 0), null, new Circle(
-				new Position(0, 1), 0, 2, 11, null));
-		buttonManager.createButton(50, new Position(80, 80), null, new Circle(
-				new Position(0, 1), 0, 2, 11, null));
-
-		sceneManager = new Scene();
+		sceneManager = new Scene(this, 100, 100);
 		Log.e("==> Scene",
 				sceneManager.setButton(buttonManager.buttons().get(0)) + "");
 		Log.e("==> Scene",
@@ -62,59 +55,49 @@ public class GameManager extends Activity {
 		starter.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				// Add button to the screen
-				
+
 				ArrayList<Position> pos = new ArrayList<Position>();
-				for(BeatButton btn : buttonManager.buttons()){
+				for (BeatButton btn : buttonManager.buttons()) {
 					pos.add(btn.position());
 				}
-				
+
 				animView.startAnimation(pos);
-				
+
 				sceneManager.drawButton(buttonManager.buttons().get(0),
 						GameManager.this, container);
-				
-				buttonManager.buttons().get(0).setOnClickListener(new OnClickListener() {
-					
-					@Override
-					public void onClick(View button) {
-						// TODO Auto-generated method stub
-						sceneManager.removeButton((BeatButton) button, GameManager.this, container);
-						animView.hideView(0);
-					}
-				});
-				
-				
+
+				buttonManager.buttons().get(0)
+						.setOnClickListener(new OnClickListener() {
+
+							@Override
+							public void onClick(View button) {
+								// TODO Auto-generated method stub
+								sceneManager.removeButton((BeatButton) button,
+										GameManager.this, container);
+								animView.hideView(0);
+							}
+						});
+
 				sceneManager.drawButton(buttonManager.buttons().get(1),
 						GameManager.this, container);
 
-				buttonManager.buttons().get(1).setOnClickListener(new OnClickListener() {
-					
-					@Override
-					public void onClick(View button) {
-						// TODO Auto-generated method stub
-						sceneManager.removeButton((BeatButton) button, GameManager.this, container);
-						animView.hideView(1);
-					}
-				});
-				
-				
+				buttonManager.buttons().get(1)
+						.setOnClickListener(new OnClickListener() {
+
+							@Override
+							public void onClick(View button) {
+								// TODO Auto-generated method stub
+								sceneManager.removeButton((BeatButton) button,
+										GameManager.this, container);
+								animView.hideView(1);
+							}
+						});
 
 			}
 		});
 
 		level = intent.getStringExtra("level");
-
 		System.out.println(level);
-
-		// buttonManager = new ButtonManager(this);
-		// this.startGame();
-		// if(level.equals(SetupManager.level.easy)){
-		// speed=0;
-		// }else if (level.equals(SetupManager.level.normal)){
-		// speed=1;
-		// }else if(level.equals(SetupManager.level.hard)){
-		// speed=2;
-		// }
 	}
 
 	@Override
@@ -143,7 +126,7 @@ public class GameManager extends Activity {
 			i = 25;
 		}
 		for (int j = 0; j < i; j++) {
-			buttonManager.createButton(10, new Position(j, 10 + j), null, null);
+			buttonManager.createButton(new Position(j, 10 + j), 10, 25, 1000);
 		}
 	}
 }
