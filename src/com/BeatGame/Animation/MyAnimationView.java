@@ -23,7 +23,7 @@ import com.nineoldandroids.animation.ValueAnimator;
 public class MyAnimationView extends View implements ValueAnimator.AnimatorUpdateListener {
 
         private static final float BALL_SIZE = 100f;
-        private static final int DURATION = 1500;
+        private static final int DURATION = 3500;
 
         public final ArrayList<ShapeHolder> balls = new ArrayList<ShapeHolder>();
         AnimatorSet animation = null;
@@ -99,6 +99,8 @@ public class MyAnimationView extends View implements ValueAnimator.AnimatorUpdat
 	            addBall(150, 60);
 	            addBall(250, 50);
 	            addBall(350, 80);
+	            addBall(450, 80);
+	            addBall(650, 80);
         	}
             createAnimation();
             bounceAnim.start();

@@ -1,4 +1,4 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
@@ -10,4 +10,4 @@
         android:text="Run"
         android:id="@+id/startButton"
         />
-</LinearLayout>
+</RelativeLayout>

@@ -7,9 +7,10 @@ import android.media.Image;
 
 public class ButtonManager {
 
-	ArrayList<BeatButton> buttonList;
+	private ArrayList<BeatButton> buttonList;
 	Context context;
 	int buttonID;
+	
 
 	
 	//Construction of the  button Manager
@@ -31,13 +32,19 @@ public class ButtonManager {
 		buttonID++;
 		buttonList.add( new BeatButton(this.context, this.buttonID, size, position, image, circle));
 		return buttonID;
+
 	}
 
+	
 	//delete a BeatButton in the buttonList
 	public int deleteButton(int id){
 		for (BeatButton button : buttonList){
-			if (button.id == id) buttonList.remove(button); 
+			if (button.id() == id) buttonList.remove(button); 
 		}
 		return 0;
+	}
+	
+	public ArrayList<BeatButton> buttons(){
+		return buttonList;
 	}
 }

@@ -1,16 +1,15 @@
 package com.BeatGame.UI;
 //import com.BeatGame.UI.SceneInterface;
 
-import android.widget.Button;
+import java.util.HashMap;
+import java.util.List;
+
+import android.content.Context;
+import android.util.Log;
+import android.widget.RelativeLayout;
 
 import com.BeatGame.Component.BeatButton;
 import com.BeatGame.Component.Position;
-import junit.framework.Assert;
-
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
 
 public class Scene implements SceneInterface {
 
@@ -74,7 +73,7 @@ public class Scene implements SceneInterface {
         for (BeatButton key : buttonsMap.keySet()) {
             radius = key.size();
             pos = buttonsMap.get(key);
-            overlap &=  collisionBetweenCircles(pos.x(), pos.y(), radius, p.x(), p.y(), b.size());
+            overlap |=  collisionBetweenCircles(pos.x(), pos.y(), radius, p.x(), p.y(), b.size());
         }
         return overlap;
     }
@@ -92,4 +91,26 @@ public class Scene implements SceneInterface {
         int d2 = (x-a)*(x-a) + (y-b)*(y-b);
         return (d2 < (radius1 + radius2)*(radius1 + radius2)); // return true if there is collision
     }
+    
+    public boolean drawButton(BeatButton button, Context context, RelativeLayout  layout){
+    	
+
+    	RelativeLayout.LayoutParams params;
+    	
+        button.setText("Button");
+        params = new RelativeLayout.LayoutParams(button.size(),button.size());
+        params.leftMargin = button.position().x();
+        params.topMargin = button.position().y();
+        
+    	Log.e("Draw button","button");
+
+        
+        layout.addView(button, params);
+        
+            	
+    	return true;
+    }
+    
+    
+   
 }
