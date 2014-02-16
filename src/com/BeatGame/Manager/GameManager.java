@@ -22,12 +22,8 @@ public class GameManager extends Activity {
 
 	// Speed of the game
 	private int speed;
-
-	// SetupManager.level enum
-	private String level;
-
-	// The current score
-	private int score;	
+	private String level; // SetupManager.level should be an enum
+	private int score;
 	private ButtonManager buttonManager;
 	private Scene sceneManager;
 	private RelativeLayout container;
@@ -43,17 +39,13 @@ public class GameManager extends Activity {
         final MyAnimationView animView = new MyAnimationView(this);
         container.addView(animView);
 
-        
-        
         buttonManager = new ButtonManager(this);
-        
         buttonManager.createButton(50, new Position(10, 0), null, new Circle(new Position(0,1), 0, 2, 11, null));
         buttonManager.createButton(50, new Position(80, 80), null, new Circle(new Position(0,1), 0, 2, 11, null));
         
-        sceneManager = new Scene();
+        sceneManager = new Scene(this, 100, 100);
         Log.e("==> Scene",sceneManager.setButton(buttonManager.buttons().get(0))+"");
         Log.e("==> Scene",sceneManager.setButton(buttonManager.buttons().get(1))+"");
-        
         
         Button starter = (Button) findViewById(R.id.startButton);
         starter.setOnClickListener(new View.OnClickListener() {
@@ -62,10 +54,8 @@ public class GameManager extends Activity {
                 
             	sceneManager.drawButton(buttonManager.buttons().get(0), GameManager.this, container);
             	sceneManager.drawButton(buttonManager.buttons().get(1), GameManager.this, container);
-            	
+
             	            	animView.startAnimation();
-            	
-                	
             }
         });
         

@@ -10,9 +10,7 @@ public class ButtonManager {
 	private ArrayList<BeatButton> buttonList;
 	Context context;
 	int buttonID;
-	
 
-	
 	//Construction of the  button Manager
 	public ButtonManager(Context context){
 		this.context = context;
@@ -25,8 +23,7 @@ public class ButtonManager {
 		return 0; // No button
 	}
 
-	
-	//Create a BeatButton in the buttonList 
+	//Create a BeatButton in the buttonList
 	//return the ID of the buttonS
 	public int createButton(int size, Position position, Image image, Circle circle){
 		buttonID++;
@@ -35,11 +32,10 @@ public class ButtonManager {
 
 	}
 
-	
 	//delete a BeatButton in the buttonList
 	public int deleteButton(int id){
 		for (BeatButton button : buttonList){
-			if (button.id() == id) buttonList.remove(button); 
+			if (button.id() == id) buttonList.remove(button);
 		}
 		return 0;
 	}
