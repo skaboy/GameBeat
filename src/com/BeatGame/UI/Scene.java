@@ -12,6 +12,7 @@ import android.content.Context;
 import com.BeatGame.Component.BeatButton;
 import com.BeatGame.Component.Position;
 import com.BeatGame.Management.R;
+import com.BeatGame.Manager.GameManager;
 
 public class Scene implements SceneInterface {
 
@@ -19,6 +20,7 @@ public class Scene implements SceneInterface {
     int height = 0;
     Context context;
     HashMap<BeatButton, Position> buttonsMap = new HashMap<BeatButton, Position>() ;
+    private int buttonOnScreen = 0;
 
     // @ctor
     public Scene(Context ctx, int h, int w) {
@@ -124,14 +126,19 @@ public class Scene implements SceneInterface {
     	Log.e("Draw button","button");
         
         layout.addView(button, params);
-                    	
+        // Increase number of buttons on screen
+        buttonOnScreen++;
     	return true;
     }
  
     public boolean removeButton(BeatButton button , Context context, RelativeLayout layout){
     	
     	layout.removeView(button);
-    	
+    	buttonOnScreen--;
+	 	if(buttonOnScreen==0){
+	 		GameManager.gameManager.startGame();
+	 		GameManager.animView.restartAnimation();
+	 	}
     	return true;
     }
 
@@ -141,6 +148,10 @@ public class Scene implements SceneInterface {
     
     public int buttonsMapSize() {
         return buttonsMap.size();
+    }
+    
+    public void clearButtons(){
+    	buttonsMap.clear();
     }
 
 }

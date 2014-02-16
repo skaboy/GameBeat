@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -31,6 +32,8 @@ public class GameManager extends Activity {
 	private ButtonManager buttonManager;
 	private Scene sceneManager;
 	private RelativeLayout container;
+	public static MyAnimationView animView;
+	public static GameManager gameManager;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -41,9 +44,9 @@ public class GameManager extends Activity {
 		container = (RelativeLayout) findViewById(R.id.container);
 		buttonManager = new ButtonManager(this);
 		sceneManager = new Scene(this, 800, 800);
-		final MyAnimationView animView = new MyAnimationView(this, sceneManager);
+		animView = new MyAnimationView(this, sceneManager);
 		container.addView(animView);
-		this.startGame();
+		startGame();
 
 		Button starter = (Button) findViewById(R.id.startButton);
 		starter.setOnClickListener(new View.OnClickListener() {
@@ -62,8 +65,7 @@ public class GameManager extends Activity {
 				int i=0;
 	    		for (BeatButton key : buttons.keySet()) {
 	    			final int t = i;
-//					sceneManager.drawButton(buttonManager.buttons().get(j),
-//							GameManager.this, container);
+	    			final BeatButton tmpButton = key;
 					sceneManager.drawButton(key,
 							GameManager.this, container);
 
@@ -72,16 +74,21 @@ public class GameManager extends Activity {
 								@Override
 								public void onClick(View button) {
 									// TODO Auto-generated method stub
-									sceneManager.removeButton(
-											(BeatButton) button,
-											GameManager.this, container);
+									sceneManager.removeButton( (BeatButton) button,GameManager.this, container);
 									animView.hideView(t);
 								}
 							});
+					
+					CircleListener thread = new CircleListener();
+					thread.execute(new Object[]{tmpButton, new Integer(t)});
+					
 					i++;
+					
 				}
 			}
 		});
+		
+		gameManager = this;
 	}
 
 	@Override
@@ -108,10 +115,42 @@ public class GameManager extends Activity {
 		} else if (level.equals("hard")) {
 			levelRank = 25;
 		}
-		for (int j = 0; j < levelRank; j++) {
-			buttonManager.createButton(new Position(j * 10, 10 * j), 50, 100,
+		
+		// reset
+		buttonManager.clearButtons();
+		sceneManager.clearButtons();
+		
+		for (int j =1; j <= levelRank; j++) {
+			buttonManager.createButton(new Position(j * 50, 10), 50, 100,
 					1000);
-			sceneManager.setButton(buttonManager.buttons().get(j));
+			sceneManager.setButton(buttonManager.buttons().get(j-1));
+		}
+	}
+	
+	private class CircleListener extends AsyncTask<Object, Void, BeatButton> {
+
+		int circleIndex = 0;
+		
+		@Override
+		protected BeatButton doInBackground(Object... btns) {
+			
+			try {
+				Thread.sleep(MyAnimationView.getDuration());
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			circleIndex = (Integer) btns[1];
+			return (BeatButton) btns[0];
+		}
+
+		@Override
+		protected void onPostExecute(BeatButton btn) {
+			
+			animView.hideView(circleIndex);
+			sceneManager.removeButton(btn,
+					GameManager.this, container);
 		}
 	}
 }

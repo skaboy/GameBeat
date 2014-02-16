@@ -23,6 +23,9 @@ public class ButtonManager {
 		return 0; // No button
 	}
 
+	public void clearButtons(){
+		buttonList.clear();
+	}
 
     // create the button and the circle associated, return the id of the button
     public int createButton(Position position, int size, int circleSize, float circleDuration){

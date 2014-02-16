@@ -43,6 +43,10 @@ public class MyAnimationView extends View implements ValueAnimator.AnimatorUpdat
             scene=sc;
             
         }
+        
+        public static int getDuration(){
+        	return DURATION;
+        }
 
         private void createAnimation() {
             //if (bounceAnim == null) {
@@ -166,14 +170,14 @@ public class MyAnimationView extends View implements ValueAnimator.AnimatorUpdat
         public void restartAnimation() {
         	balls.clear();
     		HashMap<BeatButton, Position> buttons = scene.buttonsMap();
-
+    		Log.e("BUTTONS: ", buttons.size()+" ");
     		for (BeatButton key : buttons.keySet()) {
     			//addBall(buttons.get(key).x()-25, buttons.get(key).y()-25);
     			addBall(buttons.get(key).x()-key.size()/2, buttons.get(key).y()-key.size()/2);
     		}
     		for(ShapeHolder ball: balls){
         		ball.setAlpha(50);
-     	}
+    		}
     		createAnimation();
     		bounceAnim.start();
     	}
