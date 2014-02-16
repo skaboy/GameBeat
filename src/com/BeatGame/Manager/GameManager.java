@@ -1,17 +1,19 @@
 package com.BeatGame.Manager;
 
+import java.util.ArrayList;
+
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.BeatGame.Animation.MyAnimationView;
+import com.BeatGame.Component.BeatButton;
 import com.BeatGame.Component.ButtonManager;
 import com.BeatGame.Component.Circle;
 import com.BeatGame.Component.Position;
@@ -46,12 +48,31 @@ public class GameManager extends Activity {
 		starter.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				// Add button to the screen
+
+				ArrayList<Position> pos = new ArrayList<Position>();
+				for (BeatButton btn : buttonManager.buttons()) {
+					pos.add(btn.position());
+				}
+
+				//animView.startAnimation(pos);
+				animView.restartAnimation();
 				for (int j = 0; j < levelRank; j++) {
 					sceneManager.drawButton(buttonManager.buttons().get(j),
 							GameManager.this, container);
+
+					buttonManager.buttons().get(j)
+							.setOnClickListener(new OnClickListener() {
+
+								@Override
+								public void onClick(View button) {
+									// TODO Auto-generated method stub
+									sceneManager.removeButton(
+											(BeatButton) button,
+											GameManager.this, container);
+									animView.hideView(0);
+								}
+							});
 				}
-				// animView.startAnimation();
-				animView.restartAnimation();
 			}
 		});
 	}
@@ -81,9 +102,9 @@ public class GameManager extends Activity {
 			levelRank = 25;
 		}
 		for (int j = 0; j < levelRank; j++) {
-			buttonManager.createButton(new Position(j*10, 10 * j), 10, 25, 1000);
+			buttonManager.createButton(new Position(j * 10, 10 * j), 10, 25,
+					1000);
 			sceneManager.setButton(buttonManager.buttons().get(j));
 		}
-
 	}
 }

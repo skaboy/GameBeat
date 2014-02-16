@@ -18,10 +18,11 @@ public class ButtonManager {
 		buttonID = 0;
 	}
 
-	//return the id of the button at the position in parameter
-	public int buttonAtPosition(Position position){
+	// return the id of the button at the position in parameter
+	public int buttonAtPosition(Position position) {
 		return 0; // No button
 	}
+
 
     // create the button and the circle associated, return the id of the button
     public int createButton(Position position, int size, int circleSize, float circleDuration){
@@ -39,8 +40,8 @@ public class ButtonManager {
 		}
 		return 0;
 	}
-	
-	public ArrayList<BeatButton> buttons(){
+
+	public ArrayList<BeatButton> buttons() {
 		return buttonList;
 	}
 }
