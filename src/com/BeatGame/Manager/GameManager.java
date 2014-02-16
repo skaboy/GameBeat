@@ -24,6 +24,7 @@ public class GameManager extends Activity {
 	private int speed;
 	private String level; // SetupManager.level should be an enum
 	private int score;
+	private int levelRank = 0;
 	private ButtonManager buttonManager;
 	private Scene sceneManager;
 	private RelativeLayout container;
@@ -33,45 +34,26 @@ public class GameManager extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.game_manager);
 		Intent intent = getIntent();
-		System.out.println(intent.getStringExtra("level"));
-		
+		level = intent.getStringExtra("level");
 		container = (RelativeLayout) findViewById(R.id.container);
-        final MyAnimationView animView = new MyAnimationView(this);
-        container.addView(animView);
+		buttonManager = new ButtonManager(this);
+		sceneManager = new Scene(this, 800, 800);
+		final MyAnimationView animView = new MyAnimationView(this, sceneManager);
+		container.addView(animView);
+		this.startGame();
 
-        buttonManager = new ButtonManager(this);
-        buttonManager.createButton(new Position(10, 0), 50,  100, 2000);
-        buttonManager.createButton(new Position(80, 80), 50,  130, 2000);
-        
-        sceneManager = new Scene(this, 100, 100);
-        Log.e("==> Scene",sceneManager.setButton(buttonManager.buttons().get(0))+"");
-        Log.e("==> Scene",sceneManager.setButton(buttonManager.buttons().get(1))+"");
-        
-        Button starter = (Button) findViewById(R.id.startButton);
-        starter.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-            	// Add button to the screen
-                
-            	sceneManager.drawButton(buttonManager.buttons().get(0), GameManager.this, container);
-            	sceneManager.drawButton(buttonManager.buttons().get(1), GameManager.this, container);
-
-            	            	animView.startAnimation();
-            }
-        });
-        
-		level =intent.getStringExtra("level");
-
-		System.out.println(level);
-		
-		//buttonManager = new ButtonManager(this);
-		//this.startGame();
-		// if(level.equals(SetupManager.level.easy)){
-		// speed=0;
-		// }else if (level.equals(SetupManager.level.normal)){
-		// speed=1;
-		// }else if(level.equals(SetupManager.level.hard)){
-		// speed=2;
-		// }
+		Button starter = (Button) findViewById(R.id.startButton);
+		starter.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				// Add button to the screen
+				for (int j = 0; j < levelRank; j++) {
+					sceneManager.drawButton(buttonManager.buttons().get(j),
+							GameManager.this, container);
+				}
+				// animView.startAnimation();
+				animView.restartAnimation();
+			}
+		});
 	}
 
 	@Override
@@ -89,18 +71,19 @@ public class GameManager extends Activity {
 		level = lvl;
 	}
 
-	public void startGame(){
-		//create list oif button in ButtonManger
-		int i = 0;
-		if(level.equals("easy")){
-			i=10;
-		}else if(level.equals("normal")){
-			i=20;
-		} else if(level.equals("hard")){
-			i=25;
+	public void startGame() {
+		// create list of button in ButtonManger
+		if (level.equals("easy")) {
+			levelRank = 10;
+		} else if (level.equals("normal")) {
+			levelRank = 20;
+		} else if (level.equals("hard")) {
+			levelRank = 25;
 		}
-		for(int j=0; j<i;j++){
-			buttonManager.createButton(new Position(j, 10+j), 10, 25, 1000);
+		for (int j = 0; j < levelRank; j++) {
+			buttonManager.createButton(new Position(j*10, 10 * j), 10, 25, 1000);
+			sceneManager.setButton(buttonManager.buttons().get(j));
 		}
+
 	}
 }

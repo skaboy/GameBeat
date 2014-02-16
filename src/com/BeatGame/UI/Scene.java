@@ -1,6 +1,7 @@
 package com.BeatGame.UI;
 //import com.BeatGame.UI.SceneInterface;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import android.content.Context;
@@ -126,6 +127,10 @@ public class Scene implements SceneInterface {
             	
     	return true;
     }
+
+	public HashMap<BeatButton, Position> buttonsMap() {
+		return buttonsMap;
+	}
     
     public int buttonsMapSize() {
         return buttonsMap.size();
