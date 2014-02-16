@@ -1,6 +1,7 @@
 package com.BeatGame.Manager;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -48,6 +49,7 @@ public class GameManager extends Activity {
 		starter.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				// Add button to the screen
+				
 
 				ArrayList<Position> pos = new ArrayList<Position>();
 				for (BeatButton btn : buttonManager.buttons()) {
@@ -56,12 +58,16 @@ public class GameManager extends Activity {
 
 				//animView.startAnimation(pos);
 				animView.restartAnimation();
-				for (int j = 0; j < levelRank; j++) {
-					sceneManager.drawButton(buttonManager.buttons().get(j),
+				HashMap<BeatButton, Position> buttons = sceneManager.buttonsMap();
+				int i=0;
+	    		for (BeatButton key : buttons.keySet()) {
+	    			final int t = i;
+//					sceneManager.drawButton(buttonManager.buttons().get(j),
+//							GameManager.this, container);
+					sceneManager.drawButton(key,
 							GameManager.this, container);
 
-					buttonManager.buttons().get(j)
-							.setOnClickListener(new OnClickListener() {
+					key.setOnClickListener(new OnClickListener() {
 
 								@Override
 								public void onClick(View button) {
@@ -69,9 +75,10 @@ public class GameManager extends Activity {
 									sceneManager.removeButton(
 											(BeatButton) button,
 											GameManager.this, container);
-									animView.hideView(0);
+									animView.hideView(t);
 								}
 							});
+					i++;
 				}
 			}
 		});
@@ -95,14 +102,14 @@ public class GameManager extends Activity {
 	public void startGame() {
 		// create list of button in ButtonManger
 		if (level.equals("easy")) {
-			levelRank = 10;
+			levelRank = 5;
 		} else if (level.equals("normal")) {
 			levelRank = 20;
 		} else if (level.equals("hard")) {
 			levelRank = 25;
 		}
 		for (int j = 0; j < levelRank; j++) {
-			buttonManager.createButton(new Position(j * 10, 10 * j), 10, 25,
+			buttonManager.createButton(new Position(j * 10, 10 * j), 50, 100,
 					1000);
 			sceneManager.setButton(buttonManager.buttons().get(j));
 		}

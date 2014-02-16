@@ -166,8 +166,10 @@ public class MyAnimationView extends View implements ValueAnimator.AnimatorUpdat
         public void restartAnimation() {
         	balls.clear();
     		HashMap<BeatButton, Position> buttons = scene.buttonsMap();
+
     		for (BeatButton key : buttons.keySet()) {
-    			addBall(buttons.get(key).x(), buttons.get(key).y());
+    			//addBall(buttons.get(key).x()-25, buttons.get(key).y()-25);
+    			addBall(buttons.get(key).x()-key.size()/2, buttons.get(key).y()-key.size()/2);
     		}
     		for(ShapeHolder ball: balls){
         		ball.setAlpha(50);
