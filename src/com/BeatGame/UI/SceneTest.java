@@ -30,15 +30,16 @@ public class SceneTest extends TestCase {
         System.out.println("Empty Map : ok ");
 
         // add one button
-        BeatButton button1 = new BeatButton(context, 1, 1, new Position(0,0), null , null);
+        //BeatButton(Context context, int id, int size, Position position, Circle circle) {
+        BeatButton button1 = new BeatButton(context, 1, 10, new Position(0,0), new Circle(1000, 20));
         Log.e("<TEST> Successfully add one button into the scene", (myScene.setButton(button1))? "Ok": "Fail" ) ;
 
         // add the exact same button, shouldn't be possible
-        BeatButton button1Bis = new BeatButton(context, 1, 1, new Position(0,0), null , null);
+        BeatButton button1Bis = new BeatButton(context, 2, 10, new Position(0,0),new Circle(1000, 20));
         Log.e("<TEST> Successfully failed to add the same one button into the scene", (!myScene.setButton(button1Bis)&& myScene.buttonsMapSize()== 1)? "Ok": "Fail" ) ;
 
         // add an other button, should work !
-        BeatButton button2 = new BeatButton(context, 1, 1, new Position(15,15), null , null);
+        BeatButton button2 = new BeatButton(context, 3, 10, new Position(15,15), new Circle(1000, 20));
         Log.e("<TEST> Successfully add a second button into the scene", (myScene.setButton(button2)&& myScene.buttonsMapSize()== 1)? "Ok": "Fail" ) ;
 
         // check the list

@@ -7,6 +7,8 @@ import android.graphics.drawable.shapes.OvalShape;
 import android.util.AttributeSet;
 import android.view.View;
 
+// Warning : Not used class but may be usefull later, keep it there so far.
+
 public class CircleView extends View {
 
 	private ShapeDrawable mDrawable;

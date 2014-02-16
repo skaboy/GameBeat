@@ -40,8 +40,8 @@ public class GameManager extends Activity {
         container.addView(animView);
 
         buttonManager = new ButtonManager(this);
-        buttonManager.createButton(50, new Position(10, 0), null, new Circle(new Position(0,1), 0, 2, 11, null));
-        buttonManager.createButton(50, new Position(80, 80), null, new Circle(new Position(0,1), 0, 2, 11, null));
+        buttonManager.createButton(new Position(10, 0), 50,  100, 2000);
+        buttonManager.createButton(new Position(80, 80), 50,  130, 2000);
         
         sceneManager = new Scene(this, 100, 100);
         Log.e("==> Scene",sceneManager.setButton(buttonManager.buttons().get(0))+"");
@@ -100,7 +100,7 @@ public class GameManager extends Activity {
 			i=25;
 		}
 		for(int j=0; j<i;j++){
-			buttonManager.createButton(10, new Position(j, 10+j), null, null);
+			buttonManager.createButton(new Position(j, 10+j), 10, 25, 1000);
 		}
 	}
 }
