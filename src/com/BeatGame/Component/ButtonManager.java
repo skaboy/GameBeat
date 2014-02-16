@@ -47,4 +47,5 @@ public class ButtonManager {
 	public ArrayList<BeatButton> buttons(){
 		return buttonList;
 	}
+
 }

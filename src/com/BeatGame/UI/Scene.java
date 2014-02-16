@@ -103,7 +103,6 @@ public class Scene implements SceneInterface {
         params.topMargin = button.position().y();
         
     	Log.e("Draw button","button");
-
         
         layout.addView(button, params);
         
