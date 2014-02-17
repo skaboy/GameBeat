@@ -28,13 +28,12 @@ public class MyAnimationView extends View implements ValueAnimator.AnimatorUpdat
         private static final int DURATION = 3500;
 
         public ArrayList<ShapeHolder> balls = new ArrayList<ShapeHolder>();
+        ArrayList<Animator> listAnimator;
         AnimatorSet animation = null;
         Animator bounceAnim = null;
         ShapeHolder ball = null;
         private Scene scene;
-        
-        int abc = 10;
-        
+                
         public MyAnimationView(Context context, Scene sc) {
             super(context);
             scene=sc;
@@ -47,9 +46,8 @@ public class MyAnimationView extends View implements ValueAnimator.AnimatorUpdat
 
         private void createAnimation() {
 
-            	ArrayList<Animator> listAnimator = new ArrayList<Animator>();
+            	listAnimator = new ArrayList<Animator>();
                 for(ShapeHolder ball:balls){
-	                
 	                PropertyValuesHolder pvhW = PropertyValuesHolder.ofFloat("width", ball.getWidth(),
 	                        ball.getWidth() / 2);
 	                PropertyValuesHolder pvhH = PropertyValuesHolder.ofFloat("height", ball.getHeight(),
@@ -60,15 +58,12 @@ public class MyAnimationView extends View implements ValueAnimator.AnimatorUpdat
 	                        ball.getY()+25);
 	                ObjectAnimator whxyBouncer = ObjectAnimator.ofPropertyValuesHolder(ball, pvhW, pvhH,
 	                        pvTX, pvTY).setDuration(DURATION);
-	                //whxyBouncer.setRepeatCount(1);
-	                whxyBouncer.setRepeatMode(ValueAnimator.REVERSE);
 	                listAnimator.add(whxyBouncer);
                 }
 
                 ((ObjectAnimator)listAnimator.get(0)).addUpdateListener(this);
                 bounceAnim = new AnimatorSet();
-                ((AnimatorSet)bounceAnim).playTogether( listAnimator
-                        );
+                ((AnimatorSet)bounceAnim).playTogether( listAnimator);
 
         }
 
@@ -79,7 +74,7 @@ public class MyAnimationView extends View implements ValueAnimator.AnimatorUpdat
         		}    	
         		for(ShapeHolder ball: balls){
 	        		ball.setAlpha(50);
-	     	}
+        		}
         
             createAnimation();
             bounceAnim.start();
@@ -127,19 +122,18 @@ public class MyAnimationView extends View implements ValueAnimator.AnimatorUpdat
         public void hideView(int id){
         	balls.get(id).setAlpha(0);
         }
-        
+       
         public void onAnimationUpdate(ValueAnimator animation) {
         	invalidate();
         }
         
         public void restartAnimation() {
+        	
         	balls.clear();
     		HashMap<BeatButton, Position> buttons = scene.buttonsMap();
+    		//Log.e("SIZE MAP ===> ",scene.buttonsMap().size()+"");
     		for (BeatButton key : buttons.keySet()) {
     			addBall(buttons.get(key).x()-key.size()/2, buttons.get(key).y()-key.size()/2);
-    		}
-    		for(ShapeHolder ball: balls){
-        		ball.setAlpha(50);
     		}
     		//Log.e("SIZE BALL ===> ",balls.size()+"");
     		createAnimation();
