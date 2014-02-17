@@ -10,6 +10,7 @@ import android.widget.RelativeLayout;
 import android.content.Context;
 
 import com.BeatGame.Component.BeatButton;
+import com.BeatGame.Component.ButtonManager;
 import com.BeatGame.Component.Position;
 import com.BeatGame.Management.R;
 import com.BeatGame.Manager.GameManager;
@@ -21,13 +22,15 @@ public class Scene implements SceneInterface {
     Context context;
     HashMap<BeatButton, Position> buttonsMap = new HashMap<BeatButton, Position>() ;
     private int buttonOnScreen = 0;
+    private ButtonManager buttonManager;
 
     // @ctor
-    public Scene(Context ctx, int h, int w) {
+    public Scene(Context ctx, int h, int w, ButtonManager buttonManager) {
         width = w;
         height = h;
         context = ctx;
         buttonsMap = new HashMap<BeatButton, Position>() ;
+        this.buttonManager = buttonManager;
         System.out.println("Scene constructed and return !");
     }
 
@@ -49,7 +52,6 @@ public class Scene implements SceneInterface {
 
     @Override
     public boolean setButton(BeatButton b) {
-        System.out.println("About to set a button");
         if ( !isOverlapping(b) ) {
             buttonsMap.put(b, b.position());
             return true;
@@ -122,23 +124,25 @@ public class Scene implements SceneInterface {
         params = new RelativeLayout.LayoutParams(button.size(),button.size());
         params.leftMargin = button.position().x();
         params.topMargin = button.position().y();
-        
-    	Log.e("Draw button","button");
-        
         layout.addView(button, params);
-        // Increase number of buttons on screen
-        buttonOnScreen++;
-    	return true;
+        return true;
     }
  
     public boolean removeButton(BeatButton button , Context context, RelativeLayout layout){
     	
-    	layout.removeView(button);
-    	buttonOnScreen--;
-	 	if(buttonOnScreen==0){
-	 		GameManager.gameManager.startGame();
-	 		GameManager.animView.restartAnimation();
-	 	}
+	    	if(buttonsMap.size()>0){
+		 		//Log.e("Before Layout: ",""+layout.getChildCount());
+	
+		    	layout.removeView(button);
+		    	buttonsMap.remove(button);
+		    	
+		    	Log.e("Numbre of button on Screen: ",""+buttonsMap.size());
+			 	if(buttonsMap.size()==0){
+			 		//Log.e("SIZE Layout: ",""+layout.getChildCount());
+			 		GameManager.gameManager.startGame();
+			 		//GameManager.animView.restartAnimation();
+			 	}
+	    	}
     	return true;
     }
 

@@ -17,7 +17,7 @@ public class SceneTest extends TestCase {
     Context context;
 
     public SceneTest(Context ctx){
-        myScene = new Scene(context, 100,100);
+        myScene = new Scene(context, 100,100, null);
         context = ctx;
         initTest();
     }

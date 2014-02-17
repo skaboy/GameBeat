@@ -1,6 +1,5 @@
 package com.BeatGame.Manager;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import android.app.Activity;
@@ -17,7 +16,6 @@ import android.widget.RelativeLayout;
 import com.BeatGame.Animation.MyAnimationView;
 import com.BeatGame.Component.BeatButton;
 import com.BeatGame.Component.ButtonManager;
-import com.BeatGame.Component.Circle;
 import com.BeatGame.Component.Position;
 import com.BeatGame.Management.R;
 import com.BeatGame.UI.Scene;
@@ -34,6 +32,8 @@ public class GameManager extends Activity {
 	private RelativeLayout container;
 	public static MyAnimationView animView;
 	public static GameManager gameManager;
+	private static boolean currentRound = false;
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -43,13 +43,14 @@ public class GameManager extends Activity {
 		level = intent.getStringExtra("level");
 		container = (RelativeLayout) findViewById(R.id.container);
 		buttonManager = new ButtonManager(this);
-		sceneManager = new Scene(this, 800, 800);
+		sceneManager = new Scene(this, 800, 800, buttonManager);
 		animView = new MyAnimationView(this, sceneManager);
 		container.addView(animView);
 		startGame();
 
+		
 		Button starter = (Button) findViewById(R.id.startButton);
-		starter.setOnClickListener(new View.OnClickListener() {
+		/*starter.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				// Add button to the screen
 				
@@ -86,7 +87,7 @@ public class GameManager extends Activity {
 					
 				}
 			}
-		});
+		});*/
 		
 		gameManager = this;
 	}
@@ -107,6 +108,11 @@ public class GameManager extends Activity {
 	}
 
 	public void startGame() {
+		Log.e("START GAME"," ===========> ");
+		
+		// set current round
+		currentRound = !currentRound;
+		
 		// create list of button in ButtonManger
 		if (level.equals("easy")) {
 			levelRank = 5;
@@ -120,16 +126,49 @@ public class GameManager extends Activity {
 		buttonManager.clearButtons();
 		sceneManager.clearButtons();
 		
+		// Initialize buttons
 		for (int j =1; j <= levelRank; j++) {
 			buttonManager.createButton(new Position(j * 50, 10), 50, 100,
 					1000);
 			sceneManager.setButton(buttonManager.buttons().get(j-1));
+		}
+		
+		// Configure buttons
+		animView.restartAnimation();
+		HashMap<BeatButton, Position> buttons = sceneManager.buttonsMap();
+		int i=0;
+		for (BeatButton key : buttons.keySet()) {
+			final int t = i;
+			final BeatButton tmpButton = key;
+			sceneManager.drawButton(key,
+					GameManager.this, container);
+
+			
+			key.setOnClickListener(new OnClickListener() {
+						@Override
+						public void onClick(View button) {
+							// TODO Auto-generated method stub
+							sceneManager.removeButton( (BeatButton) button,GameManager.this, container);
+							//animView.hideView(t);
+						}
+			});
+			
+			CircleListener thread = new CircleListener(currentRound);
+			thread.execute(new Object[]{tmpButton, new Integer(t)});
+			
+			i++;
+			
 		}
 	}
 	
 	private class CircleListener extends AsyncTask<Object, Void, BeatButton> {
 
 		int circleIndex = 0;
+		boolean round;
+		
+		public CircleListener(boolean round){
+			this.round = round;
+		}
 		
 		@Override
 		protected BeatButton doInBackground(Object... btns) {
@@ -147,10 +186,12 @@ public class GameManager extends Activity {
 
 		@Override
 		protected void onPostExecute(BeatButton btn) {
-			
-			animView.hideView(circleIndex);
-			sceneManager.removeButton(btn,
-					GameManager.this, container);
+			//Log.e("Numbre Thread : ",""+sceneManager.buttonsMap().size());
+			if(round==GameManager.currentRound){
+				animView.hideView(circleIndex);
+				sceneManager.removeButton(btn,
+						GameManager.this, container);
+			}
 		}
 	}
 }

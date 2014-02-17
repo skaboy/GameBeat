@@ -3,7 +3,6 @@ package com.BeatGame.Animation;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -14,7 +13,6 @@ import android.graphics.drawable.shapes.OvalShape;
 import android.util.Log;
 import android.view.View;
 
-
 import com.BeatGame.Component.BeatButton;
 import com.BeatGame.Component.Position;
 import com.BeatGame.UI.Scene;
@@ -23,7 +21,6 @@ import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
 import com.nineoldandroids.animation.PropertyValuesHolder;
 import com.nineoldandroids.animation.ValueAnimator;
-import java.util.ArrayList;
 
 public class MyAnimationView extends View implements ValueAnimator.AnimatorUpdateListener {
 
@@ -49,23 +46,6 @@ public class MyAnimationView extends View implements ValueAnimator.AnimatorUpdat
         }
 
         private void createAnimation() {
-            //if (bounceAnim == null) {
-                //ShapeHolder ball;
-               /* ball = balls.get(0);
-               ObjectAnimator yBouncer = ObjectAnimator.ofFloat(ball, "y",
-                        ball.getY(), getHeight() - BALL_SIZE).setDuration(DURATION);
-                yBouncer.setInterpolator(new CycleInterpolator(2));
-                yBouncer.addUpdateListener(this);*/
-
-                /*ball = balls.get(1);
-                PropertyValuesHolder pvhY = PropertyValuesHolder.ofFloat("y", ball.getY(),
-                        getHeight() - BALL_SIZE);
-                PropertyValuesHolder pvhAlpha = PropertyValuesHolder.ofFloat("alpha", 1.0f, 0f);
-                ObjectAnimator yAlphaBouncer = ObjectAnimator.ofPropertyValuesHolder(ball,
-                        pvhY, pvhAlpha).setDuration(DURATION/2);
-                yAlphaBouncer.setInterpolator(new AccelerateInterpolator());
-                yAlphaBouncer.setRepeatCount(1);
-                yAlphaBouncer.setRepeatMode(ValueAnimator.REVERSE);*/
 
             	ArrayList<Animator> listAnimator = new ArrayList<Animator>();
                 for(ShapeHolder ball:balls){
@@ -86,25 +66,10 @@ public class MyAnimationView extends View implements ValueAnimator.AnimatorUpdat
                 }
 
                 ((ObjectAnimator)listAnimator.get(0)).addUpdateListener(this);
-                /*ball = balls.get(3);
-                pvhY = PropertyValuesHolder.ofFloat("y", ball.getY(), getHeight() - BALL_SIZE);
-                float ballX = ball.getX();
-                Keyframe kf0 = Keyframe.ofFloat(0f, ballX);
-                Keyframe kf1 = Keyframe.ofFloat(.5f, ballX + 100f);
-                Keyframe kf2 = Keyframe.ofFloat(1f, ballX + 50f);
-                PropertyValuesHolder pvhX = PropertyValuesHolder.ofKeyframe("x", kf0, kf1, kf2);
-                ObjectAnimator yxBouncer = ObjectAnimator.ofPropertyValuesHolder(ball, pvhY,
-                        pvhX).setDuration(DURATION/2);
-                yxBouncer.setRepeatCount(1);
-                yxBouncer.setRepeatMode(ValueAnimator.REVERSE);*/
-
                 bounceAnim = new AnimatorSet();
                 ((AnimatorSet)bounceAnim).playTogether( listAnimator
                         );
 
-                
-                
-          //  }
         }
 
         public void startAnimation(ArrayList<Position> positions) {
@@ -166,18 +131,17 @@ public class MyAnimationView extends View implements ValueAnimator.AnimatorUpdat
         public void onAnimationUpdate(ValueAnimator animation) {
         	invalidate();
         }
-
+        
         public void restartAnimation() {
         	balls.clear();
     		HashMap<BeatButton, Position> buttons = scene.buttonsMap();
-    		Log.e("BUTTONS: ", buttons.size()+" ");
     		for (BeatButton key : buttons.keySet()) {
-    			//addBall(buttons.get(key).x()-25, buttons.get(key).y()-25);
     			addBall(buttons.get(key).x()-key.size()/2, buttons.get(key).y()-key.size()/2);
     		}
     		for(ShapeHolder ball: balls){
         		ball.setAlpha(50);
     		}
+    		//Log.e("SIZE BALL ===> ",balls.size()+"");
     		createAnimation();
     		bounceAnim.start();
     	}
