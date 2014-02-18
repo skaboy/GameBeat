@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -47,6 +48,9 @@ public class GameManager extends Activity {
 
 	private int screenWidth, screenHeight;
 	private int indexButtonToBeClicked = 0;
+	
+	// Thread for playing music background
+	private BackgroundSound mBackgroundSound = new BackgroundSound();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +87,9 @@ public class GameManager extends Activity {
 				startActivity(myIntent);
 			}
 		});
+		
+		// play music
+		mBackgroundSound.execute();
 	}
 
 	@Override
@@ -97,6 +104,7 @@ public class GameManager extends Activity {
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
+		
 		if (!exitGame) {
 			isOnPause = false;
 			
@@ -126,6 +134,11 @@ public class GameManager extends Activity {
 		super.onDestroy();
 		if (threadsListener != null)
 			threadsListener.cancel(true);
+		
+		if(mBackgroundSound!=null){
+			if(mBackgroundSound.player!=null) mBackgroundSound.player.stop();
+			mBackgroundSound.cancel(true);
+		}
 	}
 
 	@Override
@@ -178,11 +191,15 @@ public class GameManager extends Activity {
 			levelRank = 5;
 		}
 
+		// Adding buttons
 		final ArrayList<BeatButton> listForVerifyClick = new ArrayList<BeatButton>();
 		while (sceneManager.buttonsMap().size() < levelRank) {
+			int x = 50 + (int) (Math.random() * (screenWidth - 200));
+			int y = 50 + (int) (Math.random() * (screenHeight - 200));
+			Log.e("Width and Height: ", x+"  ana "+y);
 			BeatButton button = buttonManager.createButton(
-					new Position((int) (Math.random() * (screenWidth - 200)),
-							(int) (Math.random() * (screenHeight - 200))), 50,
+					new Position(x,
+							y), 50,
 					100, 1000);
 			if (sceneManager.setButton(button)) {
 				buttonManager.setButton(button);
@@ -192,12 +209,12 @@ public class GameManager extends Activity {
 
 		}
 
+		// Adding animation
 		final MyAnimationView animView = new MyAnimationView(this, sceneManager);
 		container.addView(animView);
 		animView.restartAnimation();
 
 		HashMap<BeatButton, Position> buttons = sceneManager.buttonsMap();
-
 		int i = 0;
 		for (BeatButton key : buttons.keySet()) {
 
@@ -237,6 +254,7 @@ public class GameManager extends Activity {
 			});
 			i++;
 		}
+		// Create and start thread to listen to the end of the animation
 		threadsListener = new CircleListener(currentRound);
 		threadsListener.execute(new Object[] { null, 0, animView });
 
@@ -278,13 +296,19 @@ public class GameManager extends Activity {
 
 		@Override
 		protected void onPostExecute(BeatButton btn) {
-			if (round == currentRound) {
-				Log.e("THREAD =========> : ", "RUNNING");
 				restartGame();
-			} else {
-				Log.e("THREAD =========> : ", "NOT RUNNING");
-			}
 		}
 	}
-
+	
+	public class BackgroundSound extends AsyncTask<Void, Void, Void> {
+		MediaPlayer player;
+	    @Override
+	    protected Void doInBackground(Void... params) {
+	        player = MediaPlayer.create(GameManager.this, R.raw.background); 
+	        player.setLooping(true); // Set looping 
+	        player.setVolume(100,100); 
+	        player.start();
+	        return null;
+	    }
+	}
 }
