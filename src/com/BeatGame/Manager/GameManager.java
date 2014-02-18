@@ -7,12 +7,15 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.BeatGame.Animation.MyAnimationView;
 import com.BeatGame.Component.BeatButton;
@@ -23,20 +26,28 @@ import com.BeatGame.UI.Scene;
 
 public class GameManager extends Activity {
 
+	final int SCORE_PER_CLICK = 10;
+
 	// Speed of the game
 	private int speed;
 	private String level; // SetupManager.level should be an enum
-	private int score;
+	private long score = 0;
 	private int levelRank = 0;
+
+	private Button pauseButton;
 	private ButtonManager buttonManager;
 	private Scene sceneManager;
 	private RelativeLayout container;
-	public  static GameManager gameManager;
-	private static boolean currentRound = false;
-	private ArrayList<CircleListener> circleListeners;
-	public static GameMainThread gameMainThread;
-	private static boolean isOnPause = false;
-	
+
+	public static GameManager gameManager;
+	private static int currentRound;
+	private CircleListener threadsListener;
+	public static boolean isOnPause;
+	public static boolean exitGame;
+
+	private int screenWidth, screenHeight;
+	private int indexButtonToBeClicked = 0;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -44,22 +55,31 @@ public class GameManager extends Activity {
 		Intent intent = getIntent();
 		level = intent.getStringExtra("level");
 		container = (RelativeLayout) findViewById(R.id.container);
+
 		buttonManager = new ButtonManager(this);
 		sceneManager = new Scene(this, 800, 800);
-		circleListeners = new ArrayList<GameManager.CircleListener>();
-		gameMainThread = new GameMainThread();
+
+		exitGame = false;
+		isOnPause = false;
+		currentRound = 0;
+
+		DisplayMetrics metrics = new DisplayMetrics();
+		getWindowManager().getDefaultDisplay().getMetrics(metrics);
+		screenHeight = metrics.heightPixels;
+		screenWidth = metrics.widthPixels;
+
 		restartGame();
-		
+
 		gameManager = this;
-		
-		Button btn = (Button) findViewById(R.id.startButton);
-		btn.setOnClickListener(new OnClickListener() {
-			
+
+		pauseButton = (Button) findViewById(R.id.startButton);
+		pauseButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				Intent myIntent = new Intent(GameManager.this, PauseActivity.class);
-				//myIntent.putExtra("key", value); //Optional parameters
+				Intent myIntent = new Intent(GameManager.this,
+						PauseActivity.class);
+				// myIntent.putExtra("key", value); //Optional parameters
 				startActivity(myIntent);
 			}
 		});
@@ -70,31 +90,44 @@ public class GameManager extends Activity {
 		// TODO Auto-generated method stub
 		super.onPause();
 		isOnPause = true;
-		
+
 	}
-	
+
 	@Override
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
-		isOnPause = false;
-		for(CircleListener listenerThread : circleListeners){
-			synchronized (listenerThread) {
-				listenerThread.notify();
+		if (!exitGame) {
+			isOnPause = false;
+			
+			synchronized (threadsListener) {
+				if (threadsListener != null)
+					threadsListener.notify();
 			}
-				
+
+		} else {
+			Intent returnIntent = new Intent();
+			returnIntent.putExtra("score", score);
+			setResult(RESULT_OK, returnIntent);
+			finish();
 		}
 	}
-	
+
+	@Override
+	public void onBackPressed() {
+		// TODO Auto-generated method stub
+		Intent myIntent = new Intent(GameManager.this, PauseActivity.class);
+		startActivity(myIntent);
+	}
+
 	@Override
 	protected void onDestroy() {
 		// TODO Auto-generated method stub
 		super.onDestroy();
-		for(CircleListener listenerThread : circleListeners){
-			listenerThread.cancel(true);
-		}
+		if (threadsListener != null)
+			threadsListener.cancel(true);
 	}
-	
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -114,7 +147,7 @@ public class GameManager extends Activity {
 		Log.e("START GAME", " ===========> ");
 
 		// set current round
-		currentRound = !currentRound;
+		currentRound++;
 
 		// reset view
 		sceneManager.clearBeatButtonType(container);
@@ -122,7 +155,13 @@ public class GameManager extends Activity {
 		// reset
 		buttonManager.clearButtons();
 		sceneManager.clearButtons();
-		circleListeners.clear();
+
+		// reset listener threads
+		if (threadsListener != null)
+			threadsListener.cancel(true);
+
+		// reset index button to be clicked
+		indexButtonToBeClicked = 0;
 
 		// remove animation view
 		for (int i = 0; i < container.getChildCount(); i++) {
@@ -132,18 +171,25 @@ public class GameManager extends Activity {
 
 		// create list of button in ButtonManger
 		if (level.equals("easy")) {
-			levelRank = 5;
+			levelRank = 1;
 		} else if (level.equals("normal")) {
-			levelRank = 20;
+			levelRank = 3;
 		} else if (level.equals("hard")) {
-			levelRank = 25;
+			levelRank = 5;
 		}
 
-		// Initialize buttons
-		for (int j = 1; j <= levelRank; j++) {
-			buttonManager.createButton(new Position(j * 100, 100), 50, 100,
-					1000);
-			sceneManager.setButton(buttonManager.buttons().get(j - 1));
+		final ArrayList<BeatButton> listForVerifyClick = new ArrayList<BeatButton>();
+		while (sceneManager.buttonsMap().size() < levelRank) {
+			BeatButton button = buttonManager.createButton(
+					new Position((int) (Math.random() * (screenWidth - 200)),
+							(int) (Math.random() * (screenHeight - 200))), 50,
+					100, 1000);
+			if (sceneManager.setButton(button)) {
+				buttonManager.setButton(button);
+				listForVerifyClick.add(buttonManager.buttons().get(
+						buttonManager.buttons().size() - 1));
+			}
+
 		}
 
 		final MyAnimationView animView = new MyAnimationView(this, sceneManager);
@@ -151,69 +197,56 @@ public class GameManager extends Activity {
 		animView.restartAnimation();
 
 		HashMap<BeatButton, Position> buttons = sceneManager.buttonsMap();
+
 		int i = 0;
 		for (BeatButton key : buttons.keySet()) {
+
 			final int t = i;
-			final BeatButton tmpButton = key;
-			sceneManager.drawButton(key, GameManager.this, container);
+			sceneManager.drawButton(key, GameManager.this, container, key.id()
+					+ "");
 
 			key.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View button) {
 					// TODO Auto-generated method stub
-					sceneManager.removeButton((BeatButton) button,
-							GameManager.this, container);
-					animView.hideView(t);
+					if (((BeatButton) button).id() == listForVerifyClick.get(
+							indexButtonToBeClicked).id()) {
+						// Increase score
+						score += SCORE_PER_CLICK;
+						indexButtonToBeClicked++;
+
+						sceneManager.removeButton((BeatButton) button,
+								GameManager.this, container);
+						animView.hideView(t);
+
+					} else {
+						final Toast toast = Toast.makeText(GameManager.this,
+								"Click the SMALLEST button first!",
+								Toast.LENGTH_SHORT);
+						toast.show();
+
+						Handler handler = new Handler();
+						handler.postDelayed(new Runnable() {
+							@Override
+							public void run() {
+								toast.cancel();
+							}
+						}, 500);
+					}
 				}
 			});
-
-			circleListeners.add(t,new CircleListener(currentRound));
-			circleListeners.get(t).execute(new Object[] { tmpButton, new Integer(t), animView });
-			
 			i++;
-
 		}
+		threadsListener = new CircleListener(currentRound);
+		threadsListener.execute(new Object[] { null, 0, animView });
+
 	}
-	
-	private class GameMainThread extends AsyncTask<Object, Void, String> {
-
-
-		@Override
-		protected String doInBackground(Object... btns) {
-
-			try {
-				Thread.sleep(MyAnimationView.getDuration());
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-			return null;
-		}
-
-		@Override
-		protected void onPostExecute(String str) {
-			
-			try {
-				wait();
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-			Log.e("======> ","Thread WAKEUP");
-
-		}
-	}
-	
 
 	private class CircleListener extends AsyncTask<Object, Void, BeatButton> {
 
-		int circleIndex = 0;
-		MyAnimationView anV;
-		boolean round;
+		int round;
 
-		public CircleListener(boolean round) {
+		public CircleListener(int round) {
 			this.round = round;
 		}
 
@@ -226,12 +259,11 @@ public class GameManager extends Activity {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
+
 			synchronized (this) {
-				Log.e("THREAD PAUSE =========> : ", ""+isOnPause);
+				Log.e("THREAD PAUSE =========> : ", "" + isOnPause);
 				if (isOnPause) {
 					// Log.e("=========> : ", "ON PAUSE");
-
 					try {
 						wait();
 					} catch (InterruptedException e) {
@@ -240,21 +272,19 @@ public class GameManager extends Activity {
 					}
 				}
 			}
-				
-			
-			circleIndex = (Integer) btns[1];
-			anV = (MyAnimationView) btns[2];
+
 			return (BeatButton) btns[0];
 		}
 
 		@Override
 		protected void onPostExecute(BeatButton btn) {
-				if (round == GameManager.currentRound) {
-					anV.hideView(circleIndex);
-					sceneManager.removeButton(btn, GameManager.this, container);
-				} else {
-					Log.e("THREAD =========> : ", "NOT RUNNING");
-				}
+			if (round == currentRound) {
+				Log.e("THREAD =========> : ", "RUNNING");
+				restartGame();
+			} else {
+				Log.e("THREAD =========> : ", "NOT RUNNING");
+			}
 		}
 	}
+
 }

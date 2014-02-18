@@ -15,6 +15,7 @@ import android.view.View;
 
 import com.BeatGame.Component.BeatButton;
 import com.BeatGame.Component.Position;
+import com.BeatGame.Manager.GameManager;
 import com.BeatGame.UI.Scene;
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.AnimatorSet;
@@ -25,7 +26,7 @@ import com.nineoldandroids.animation.ValueAnimator;
 public class MyAnimationView extends View implements ValueAnimator.AnimatorUpdateListener {
 
         private static final float BALL_SIZE = 100f;
-        private static final int DURATION = 3500;
+        private static final int DURATION = 4500;
 
         public ArrayList<ShapeHolder> balls = new ArrayList<ShapeHolder>();
         ArrayList<Animator> listAnimator;
@@ -33,6 +34,7 @@ public class MyAnimationView extends View implements ValueAnimator.AnimatorUpdat
         Animator bounceAnim = null;
         ShapeHolder ball = null;
         private Scene scene;
+        private ValueAnimator valueAnimator = null;
                 
         public MyAnimationView(Context context, Scene sc) {
             super(context);
@@ -78,6 +80,7 @@ public class MyAnimationView extends View implements ValueAnimator.AnimatorUpdat
         
             createAnimation();
             bounceAnim.start();
+            
         }
         
         public void configureAddBall(int x, int y){
@@ -124,7 +127,12 @@ public class MyAnimationView extends View implements ValueAnimator.AnimatorUpdat
         }
        
         public void onAnimationUpdate(ValueAnimator animation) {
-        	invalidate();
+        	if(!GameManager.isOnPause){
+        		invalidate();
+        		valueAnimator=null;
+        	}else{
+        		if(valueAnimator==null) valueAnimator = animation;
+        	}
         }
         
         public void restartAnimation() {

@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.Log;
 import android.widget.RelativeLayout;
 
@@ -20,7 +21,7 @@ public class Scene implements SceneInterface {
 	int height = 0;
 	Context context;
 	HashMap<BeatButton, Position> buttonsMap = new HashMap<BeatButton, Position>();
-	
+
 	// @ctor
 	public Scene(Context ctx, int h, int w) {
 		width = w;
@@ -118,11 +119,12 @@ public class Scene implements SceneInterface {
 	}
 
 	public boolean drawButton(BeatButton button, Context context,
-			RelativeLayout layout) {
+			RelativeLayout layout, String text) {
 
 		RelativeLayout.LayoutParams params;
 
-		button.setText("1");
+		button.setText(text);
+		button.setTextColor(Color.WHITE);
 		button.setBackgroundDrawable(context.getResources().getDrawable(
 				R.drawable.round_button));
 		params = new RelativeLayout.LayoutParams(button.size(), button.size());
@@ -136,15 +138,10 @@ public class Scene implements SceneInterface {
 			RelativeLayout layout) {
 
 		if (buttonsMap.size() > 0) {
-			Log.e("SIZE Layout: ", "" + layout.getChildCount());
-
 			layout.removeView(button);
 			buttonsMap.remove(button);
-
-			Log.e("Number of button on Screen: ", "" + buttonsMap.size());
-			Log.e("SIZE Layout: ", "" + layout.getChildCount());
-
 			if (buttonsMap.size() == 0) {
+				Log.e("Restart GAME ======> : ", "RESTart game");
 				GameManager.gameManager.restartGame();
 			}
 
@@ -154,11 +151,10 @@ public class Scene implements SceneInterface {
 
 	public boolean clearBeatButtonType(RelativeLayout layout) {
 
-		// Clear buttons from layout
-		for (int i = 0; i < layout.getChildCount(); i++) {
-			if (layout.getChildAt(i) instanceof BeatButton)
-				layout.removeViewAt(i);
+		for (BeatButton button : buttonsMap.keySet()) {
+			layout.removeView(button);
 		}
+		buttonsMap.clear();
 
 		return true;
 	}

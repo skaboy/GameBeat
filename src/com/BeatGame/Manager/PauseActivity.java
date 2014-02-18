@@ -40,7 +40,8 @@ public class PauseActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				//Exit the application
-				
+				GameManager.exitGame = true;
+				finish();
 				
 			}
 		});

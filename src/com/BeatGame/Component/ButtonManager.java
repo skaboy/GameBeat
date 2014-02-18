@@ -25,15 +25,21 @@ public class ButtonManager {
 
 	public void clearButtons(){
 		buttonList.clear();
+		buttonID=0;
 	}
 
     // create the button and the circle associated, return the id of the button
-    public int createButton(Position position, int size, int circleSize, float circleDuration){
+    public int setButton(BeatButton button){
         buttonID++; // cannot be index O with this , normal ?
-        Circle circle = new Circle(circleSize, circleDuration);
-        BeatButton button = new BeatButton(this.context, this.buttonID, size, position, circle);
         buttonList.add(button);
         return buttonID;
+    }
+    
+    public BeatButton createButton(Position position, int size, int circleSize, float circleDuration){
+        Circle circle = new Circle(circleSize, circleDuration);
+        BeatButton button = new BeatButton(this.context, this.buttonID+1, size, position, circle);
+        buttonList.add(button);
+        return button;
     }
 
 	//delete a BeatButton in the buttonList
