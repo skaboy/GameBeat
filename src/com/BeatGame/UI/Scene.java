@@ -28,7 +28,6 @@ public class Scene implements SceneInterface {
 		height = h;
 		context = ctx;
 		buttonsMap = new HashMap<BeatButton, Position>();
-		System.out.println("Scene constructed and return !");
 	}
 
 	@Override
@@ -170,5 +169,4 @@ public class Scene implements SceneInterface {
 	public void clearButtons() {
 		buttonsMap.clear();
 	}
-
 }

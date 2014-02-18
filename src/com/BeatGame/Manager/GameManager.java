@@ -25,6 +25,10 @@ import com.BeatGame.Component.Position;
 import com.BeatGame.Management.R;
 import com.BeatGame.UI.Scene;
 
+import static java.lang.System.currentTimeMillis;
+
+// variable to multiply with millisecond
+
 public class GameManager extends Activity {
 
 	final int SCORE_PER_CLICK = 10;
@@ -32,7 +36,8 @@ public class GameManager extends Activity {
 	// Speed of the game
 	private int speed;
 	private String level; // SetupManager.level should be an enum
-	private long score = 0;
+	private int score;
+    private long GameFactor = 100;
 	private int levelRank = 0;
 
 	private Button pauseButton;
@@ -64,14 +69,12 @@ public class GameManager extends Activity {
 
 		exitGame = false;
 		isOnPause = false;
-		
+
 		DisplayMetrics metrics = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(metrics);
 		screenHeight = metrics.heightPixels;
 		screenWidth = metrics.widthPixels;
-
 		gameManager = this;
-
 		restartGame();
 		
 		pauseButton = (Button) findViewById(R.id.startButton);
@@ -289,7 +292,7 @@ public class GameManager extends Activity {
 				restartGame();
 		}
 	}
-	
+
 	public class BackgroundSound extends AsyncTask<Void, Void, Void> {
 		MediaPlayer player;
 	    
@@ -302,4 +305,15 @@ public class GameManager extends Activity {
 	        return null;
 	    }
 	}
+
+    private long calculateScoreFromClick(BeatButton b, long clickTime){
+        // clickTime is the curentTimeInMs to know how fast was the click from the start
+        // we calculate how fast and according to the percentage we give point
+        long duration = b.circle ().duration();
+        long delta =  (long)(currentTimeMillis() - b.circle().startTime());
+        //long delta =  clickTime - b.circle().startTime()); // to uncomment when implemented
+
+        // 10 - %reaction%
+        return 10 - (delta*100 / duration);
+    }
 }
