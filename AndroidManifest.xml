@@ -27,6 +27,12 @@
             android:label="@string/title_activity_game_manager" 
             android:screenOrientation="landscape">
         </activity>
+        <activity
+            android:name="com.BeatGame.Manager.PauseActivity"
+            android:label="@string/title_activity_game_manager" 
+            android:screenOrientation="landscape"
+            android:theme="@style/Theme.Transparent">
+        </activity>
     </application>
 
 </manifest>

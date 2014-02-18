@@ -2,17 +2,14 @@ package com.BeatGame.UI;
 
 //import com.BeatGame.UI.SceneInterface;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
 import android.content.Context;
 import android.util.Log;
-import android.view.View;
 import android.widget.RelativeLayout;
-import android.content.Context;
 
 import com.BeatGame.Component.BeatButton;
-import com.BeatGame.Component.ButtonManager;
 import com.BeatGame.Component.Position;
 import com.BeatGame.Management.R;
 import com.BeatGame.Manager.GameManager;
@@ -23,16 +20,13 @@ public class Scene implements SceneInterface {
 	int height = 0;
 	Context context;
 	HashMap<BeatButton, Position> buttonsMap = new HashMap<BeatButton, Position>();
-	private int buttonOnScreen = 0;
-	private ButtonManager buttonManager;
-
+	
 	// @ctor
-	public Scene(Context ctx, int h, int w, ButtonManager buttonManager) {
+	public Scene(Context ctx, int h, int w) {
 		width = w;
 		height = h;
 		context = ctx;
 		buttonsMap = new HashMap<BeatButton, Position>();
-		this.buttonManager = buttonManager;
 		System.out.println("Scene constructed and return !");
 	}
 
