@@ -1,115 +1,142 @@
-<?xml version="1.0" encoding="utf-8"?>
-
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/layout"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:layout_gravity="center_vertical"
-    android:gravity="center" 
-    android:background="@drawable/main_background">
- 
-    <TextView
-        android:id="@+id/levelLabel"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-         android:text="LEVEL"
-         android:textColor="@android:color/white"
-         android:gravity="center_horizontal"
-         android:textSize="20dp">
-    </TextView>
-
-    <RadioGroup
-        android:id="@+id/radioLevel"
+<?xml version="1.0" encoding="utf-8"?>	
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/container"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/background"
+    android:orientation="vertical" >
+    
+	<LinearLayout
+	    android:id="@+id/layout"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:orientation="vertical"
+	    android:layout_gravity="center_vertical"
+	    android:gravity="center" 
+	    android:background="@drawable/main_background">
+	 
+	    <TextView
+	        android:id="@+id/levelLabel"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_marginBottom="10dp"
+	         android:text="LEVEL"
+	         android:textColor="@android:color/white"
+	         android:gravity="center_horizontal"
+	         android:textSize="20dp">
+	    </TextView>
+	
+	    <RadioGroup
+	        android:id="@+id/radioLevel"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:orientation="horizontal"
+	        android:layout_marginBottom="15dp"
+	        
+	        >
+	 
+	        <RadioButton
+	            android:id="@+id/radioEasy"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="Easy"
+	            android:checked="true"
+	            android:layout_margin="10dp"
+	            android:textColor="@android:color/white"
+	         />
+	 
+	        <RadioButton
+	            android:id="@+id/radioNormal"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="Normal"
+	            android:layout_margin="10dp"
+	            android:textColor="@android:color/white"/>
+	        
+	        <RadioButton
+	            android:id="@+id/radioHard"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="Hard"
+	            android:layout_margin="10dp"
+	            android:textColor="@android:color/white"/>
+	 
+	    </RadioGroup>
+	   
+	    <Button
+	        android:id="@+id/start"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="Start"
+	        android:layout_marginBottom="15dp"
+	        android:background="@drawable/main_play"
+	        android:textColor="@android:color/white"
+	        />
+	    
+	    <LinearLayout
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:orientation="horizontal"
+	    android:layout_gravity="center_horizontal"
+	    android:gravity="center" 
+	    android:paddingLeft="20dp"
+	    android:paddingRight="20dp"
+	    android:paddingTop="10dp"
+	    android:paddingBottom="10dp"
+	    android:background="@drawable/rectangle">
+	 
+	        	 <Button
+			        android:id="@+id/add_user"
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+			        android:layout_margin="5dp"
+			        android:background="@drawable/add"
+			      />
+			     <TextView
+			        android:id="@+id/username"
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+			        android:layout_margin="5dp"
+			        android:text="USER"
+			        android:textStyle="bold"
+			        android:textColor="@android:color/white"
+			        android:gravity="center_horizontal"
+			        android:textSize="15dp">
+			    </TextView>
+			    <TextView
+			        android:id="@+id/score"
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+			        android:layout_margin="10dp"
+			        android:text="SCORE"
+			        android:textStyle="bold"
+			        android:textColor="@android:color/white"
+			        android:gravity="center_horizontal"
+			        android:textSize="15dp">
+			    </TextView>
+			    
+		</LinearLayout>
+	    
+	 </LinearLayout>
+	
+	<Button
+        android:id="@+id/score_board"
+        android:layout_width="60dp"
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/score_board" />
+	<TextView
+        android:id="@+id/score_board_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginBottom="15dp"
-        
-        >
- 
-        <RadioButton
-            android:id="@+id/radioEasy"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Easy"
-            android:checked="true"
-            android:layout_margin="10dp"
-            android:textColor="@android:color/white"
-         />
- 
-        <RadioButton
-            android:id="@+id/radioNormal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Normal"
-            android:layout_margin="10dp"
-            android:textColor="@android:color/white"/>
-        
-        <RadioButton
-            android:id="@+id/radioHard"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Hard"
-            android:layout_margin="10dp"
-            android:textColor="@android:color/white"/>
- 
-    </RadioGroup>
-   
-    <Button
-        android:id="@+id/start"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Start"
-        android:layout_marginBottom="15dp"
-        android:background="@drawable/main_play"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/startButton"
+        android:layout_marginLeft="5dp"
+        android:text="SCORE BORAD"
         android:textColor="@android:color/white"
-        />
-    
-    <LinearLayout
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:layout_gravity="center_horizontal"
-    android:gravity="center" 
-    android:paddingLeft="20dp"
-    android:paddingRight="20dp"
-    android:paddingTop="10dp"
-    android:paddingBottom="10dp"
-    android:background="@drawable/rectangle">
- 
-        	 <Button
-		        android:id="@+id/add_user"
-		        android:layout_width="wrap_content"
-		        android:layout_height="wrap_content"
-		        android:layout_margin="5dp"
-		        android:background="@drawable/add"
-		      />
-		     <TextView
-		        android:id="@+id/username"
-		        android:layout_width="wrap_content"
-		        android:layout_height="wrap_content"
-		        android:layout_margin="5dp"
-		        android:text="USER"
-		        android:textStyle="bold"
-		        android:textColor="@android:color/white"
-		        android:gravity="center_horizontal"
-		        android:textSize="15dp">
-		    </TextView>
-		    <TextView
-		        android:id="@+id/score"
-		        android:layout_width="wrap_content"
-		        android:layout_height="wrap_content"
-		        android:layout_margin="5dp"
-		        android:text="SCORE"
-		        android:textStyle="bold"
-		        android:textColor="@android:color/white"
-		        android:gravity="center_horizontal"
-		        android:textSize="15dp">
-		    </TextView>
-		    
-	</LinearLayout>
-    
- </LinearLayout>
-
+        android:textSize="12dp"
+        android:textStyle="bold" />
+</RelativeLayout>

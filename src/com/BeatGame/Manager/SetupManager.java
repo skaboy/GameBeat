@@ -1,12 +1,10 @@
 package com.BeatGame.Manager;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.MalformedURLException;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
+import java.net.URLEncoder;
 import java.util.UUID;
 
 import org.apache.http.HttpResponse;
@@ -16,6 +14,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -26,6 +25,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -33,7 +33,6 @@ import android.widget.TextView;
 import com.BeatGame.Database.DatabaseHandler;
 import com.BeatGame.Database.User;
 import com.BeatGame.Management.R;
-import com.BeatGame.Manager.AddUserActivity.ServerThread;
 
 /**
  * Created by Franck on 07/02/14.
@@ -43,7 +42,6 @@ public class SetupManager extends Activity {
 	public enum level{easy, normal, hard};
 	private final String SCORE_TEXT = "BEST SCORE";
 	public static final String BASE_URL="http://gamebeat.net46.net/api/function.php";
-	
 	private RadioGroup radioLevel;
 	private RadioButton radio;
 	private TextView score, username;
@@ -52,6 +50,7 @@ public class SetupManager extends Activity {
 	private long currentScore = 0;
 	private User user;
 	private DatabaseHandler db;
+	private Button scoreBoard;
 
 	public void onCreate(Bundle savedInstanceState) {
 
@@ -122,35 +121,72 @@ public class SetupManager extends Activity {
 			}
 		});
 		
+		scoreBoard = (Button) findViewById(R.id.score_board);
+		scoreBoard.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Intent intent = new Intent(SetupManager.this,ScoreBoardActivity.class);
+				startActivity(intent);
+			}
+		});
+		
 	}
 	
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
+		if(data == null) return;
+		
 		if (requestCode == 1) {
 
-			if (resultCode == RESULT_OK) {	// Edit best score
-				if(data.getLongExtra("score",0) > currentScore){
-					currentScore = data.getLongExtra("score",0);
-					this.score.setText(SCORE_TEXT+": "+currentScore);
-					
-					if(user!=null){
+			if (resultCode == RESULT_OK) { // Edit best score
+				if (data.getLongExtra("score", 0) > currentScore) {
+					currentScore = data.getLongExtra("score", 0);
+					this.score.setText(SCORE_TEXT + ": " + currentScore);
+
+					if (user != null) {
 						// Update local data
 						user.setScore(currentScore);
 						db.updateUser(user);
-						
+
 						// Update server data
 						new ServerThread()
-						.execute(new String[] { SetupManager.BASE_URL
-								+ "?username="
-								+ user.getName()
-								+ "&score="
-								+ currentScore
-								+ "&edit="
-								+ user.getUUID() });
+								.execute(new String[] { SetupManager.BASE_URL
+										+ "?username=" + user.getName()
+										+ "&score=" + currentScore + "&edit="
+										+ user.getUUID() });
+					}
+
+				}
+				
+				if(data.getStringExtra("status")!=null){
+					if(data.getStringExtra("status").equals("gameover")){
+						// custom dialog
+						final Dialog dialog = new Dialog(this);
+						dialog.setContentView(R.layout.dialog_layout);
+						dialog.setTitle("GAME OVER");
+			 
+						// set the custom dialog components - text, image and button
+						TextView text = (TextView) dialog.findViewById(R.id.text);
+						text.setText("Your Score: "+data.getLongExtra("score", 0));
+						ImageView image = (ImageView) dialog.findViewById(R.id.image);
+						image.setImageResource(R.drawable.score_ball);
+			 
+						Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
+						// if button is clicked, close the custom dialog
+						dialogButton.setOnClickListener(new OnClickListener() {
+							@Override
+							public void onClick(View v) {
+								dialog.dismiss();
+							}
+						});
+			 
+						dialog.show();
 					}
 				}
 			}
-	
+
 		}else if(requestCode == 2){	// Add new user with currentScore
 			if (resultCode == RESULT_OK) {
 				usernameString = data.getStringExtra("username");

@@ -43,6 +43,12 @@
             android:screenOrientation="landscape"
             android:theme="@style/Theme.Transparent">
         </activity>
+        <activity
+            android:name="com.BeatGame.Manager.ScoreBoardActivity"
+            android:label="@string/title_activity_game_manager" 
+            android:screenOrientation="landscape"
+            android:theme="@style/Theme.Transparent">
+        </activity>
     </application>
 
 </manifest>

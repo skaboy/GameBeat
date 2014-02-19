@@ -313,14 +313,21 @@ public class GameManager extends Activity {
 				if(life == 3){
 					life1.setImageResource(R.drawable.life_left);
 					life --;
+					restartGame();
 				}else if(life == 2){
 					life2.setImageResource(R.drawable.life_left);
 					life --;
+					restartGame();
 				}else if(life == 1){	// Game over
 					life3.setImageResource(R.drawable.life_left);
 					life --;
+					Intent returnIntent = new Intent();
+					returnIntent.putExtra("score", score);
+					returnIntent.putExtra("status", "gameover");
+					setResult(RESULT_OK, returnIntent);
+					finish();
 				}
-                restartGame();
+				
 		}
 	}
 	
