@@ -9,6 +9,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 
 import com.BeatGame.Management.R;
 
@@ -21,6 +22,9 @@ public class SetupManager extends Activity {
 	
 	private RadioGroup radioLevel;
 	private RadioButton radio;
+	private TextView score, username;
+	private Button addUser;
+	private String usernameString;
 
 	public void onCreate(Bundle savedInstanceState) {
 
@@ -51,7 +55,21 @@ public class SetupManager extends Activity {
 			}
 		});
 		
+		score = (TextView) findViewById(R.id.score);
 		
+		username = (TextView) findViewById(R.id.username);
+		username.setText("NO NAME");
+		
+		addUser = (Button) findViewById(R.id.add_user);
+		addUser.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Intent intent = new Intent(SetupManager.this,AddUserActivity.class);
+				startActivityForResult(intent,2);
+			}
+		});
 		
 	}
 	
@@ -62,9 +80,15 @@ public class SetupManager extends Activity {
 			if (resultCode == RESULT_OK) {
 				long score = data.getLongExtra("score",0);
 				Log.e("SCORE ===>>>>>",""+score);
+				this.score.setText("SCORE: "+score);
 			}
 			if (resultCode == RESULT_CANCELED) {
 				// Write your code if there's no result
+			}
+		}else if(requestCode == 2){
+			if (resultCode == RESULT_OK) {
+				usernameString = data.getStringExtra("username");
+				username.setText(usernameString);
 			}
 		}
 	}

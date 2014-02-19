@@ -322,12 +322,17 @@ public class GameManager extends Activity {
 	
 	public class BackgroundSound extends AsyncTask<Void, Void, Void> {
 		MediaPlayer player;
-	    @Override
+	    
+		@Override
 	    protected Void doInBackground(Void... params) {
-	        player = MediaPlayer.create(GameManager.this, R.raw.background); 
+	        player = MediaPlayer.create(GameManager.this, R.raw.background1); 
 	        player.setLooping(true); // Set looping 
 	        player.setVolume(100,100); 
 	        player.start();
+			/*SoundManager.getInstance();
+		    SoundManager.initSounds(GameManager.this);
+		    SoundManager.loadSounds();*/
+		    
 	        return null;
 	    }
 	}
