@@ -27,6 +27,7 @@ public class ScoreBoardActivity extends Activity {
 		setContentView(R.layout.score_board_activity);
 		progressBar = (ProgressBar) findViewById(R.id.progressbar);
 		listUser = (ListView) findViewById(R.id.list_user);
+		
 		new ServerThread().execute(SetupManager.BASE_URL + "?allUser");
 
 	}
