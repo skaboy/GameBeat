@@ -70,10 +70,10 @@ public class GameManager extends Activity {
 		screenHeight = metrics.heightPixels;
 		screenWidth = metrics.widthPixels;
 
-		restartGame();
-
 		gameManager = this;
 
+		restartGame();
+		
 		pauseButton = (Button) findViewById(R.id.startButton);
 		pauseButton.setOnClickListener(new OnClickListener() {
 			@Override
@@ -88,25 +88,6 @@ public class GameManager extends Activity {
 		
 		// play music
 		mBackgroundSound.execute();
-		
-		/*Thread backgroundAnimation = new Thread(new Runnable() {
-			
-			@Override
-			public void run() {
-				// TODO Auto-generated method stub
-				while(true){
-					// background animation
-					GameManager.this.runOnUiThread(new Runnable() {
-					    public void run() {
-					    	TransitionDrawable transition = (TransitionDrawable) container.getBackground();
-							transition.startTransition(1000);
-					    }
-					});
-					
-				}
-			}
-		});
-		backgroundAnimation.start();*/
 	
 	}
 
@@ -317,11 +298,7 @@ public class GameManager extends Activity {
 	        player = MediaPlayer.create(GameManager.this, R.raw.background); 
 	        player.setLooping(true); // Set looping 
 	        player.setVolume(100,100); 
-	        player.start();
-			/*SoundManager.getInstance();
-		    SoundManager.initSounds(GameManager.this);
-		    SoundManager.loadSounds();*/
-		    
+	        player.start();		    
 	        return null;
 	    }
 	}
