@@ -79,12 +79,9 @@ public class SetupManager extends Activity {
 
 			if (resultCode == RESULT_OK) {
 				long score = data.getLongExtra("score",0);
-				Log.e("SCORE ===>>>>>",""+score);
 				this.score.setText("SCORE: "+score);
 			}
-			if (resultCode == RESULT_CANCELED) {
-				// Write your code if there's no result
-			}
+			
 		}else if(requestCode == 2){
 			if (resultCode == RESULT_OK) {
 				usernameString = data.getStringExtra("username");

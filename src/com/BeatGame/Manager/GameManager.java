@@ -41,7 +41,6 @@ public class GameManager extends Activity {
 	private RelativeLayout container;
 
 	public static GameManager gameManager;
-	private static int currentRound;
 	private CircleListener threadsListener;
 	public static boolean isOnPause;
 	public static boolean exitGame;
@@ -65,8 +64,7 @@ public class GameManager extends Activity {
 
 		exitGame = false;
 		isOnPause = false;
-		currentRound = 0;
-
+		
 		DisplayMetrics metrics = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(metrics);
 		screenHeight = metrics.heightPixels;
@@ -179,9 +177,6 @@ public class GameManager extends Activity {
 	public void restartGame() {
 		Log.e("START GAME", " ===========> ");
 
-		// set current round
-		currentRound++;
-
 		// reset view
 		sceneManager.clearBeatButtonType(container);
 
@@ -275,19 +270,13 @@ public class GameManager extends Activity {
 			i++;
 		}
 		// Create and start thread to listen to the end of the animation
-		threadsListener = new CircleListener(currentRound);
+		threadsListener = new CircleListener();
 		threadsListener.execute(new Object[] { null, 0, animView });
 
 	}
 
 	private class CircleListener extends AsyncTask<Object, Void, BeatButton> {
-
-		int round;
-
-		public CircleListener(int round) {
-			this.round = round;
-		}
-
+	
 		@Override
 		protected BeatButton doInBackground(Object... btns) {
 
@@ -325,7 +314,7 @@ public class GameManager extends Activity {
 	    
 		@Override
 	    protected Void doInBackground(Void... params) {
-	        player = MediaPlayer.create(GameManager.this, R.raw.background1); 
+	        player = MediaPlayer.create(GameManager.this, R.raw.background); 
 	        player.setLooping(true); // Set looping 
 	        player.setVolume(100,100); 
 	        player.start();
