@@ -7,10 +7,10 @@
     <uses-sdk
         android:minSdkVersion="7"
         android:targetSdkVersion="18" />
-	
-	<uses-permission android:name="android.permission.READ_PHONE_STATE"/>
-	<uses-permission android:name="android.permission.INTERNET" /> 
-    
+
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
@@ -22,32 +22,31 @@
             android:screenOrientation="landscape" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name="com.BeatGame.Manager.GameManager"
-            android:label="@string/title_activity_game_manager" 
-            android:screenOrientation="landscape">
+            android:label="@string/title_activity_game_manager"
+            android:screenOrientation="landscape" >
         </activity>
         <activity
             android:name="com.BeatGame.Manager.PauseActivity"
-            android:label="@string/title_activity_game_manager" 
+            android:label="@string/title_activity_game_manager"
             android:screenOrientation="landscape"
-            android:theme="@style/Theme.Transparent">
+            android:theme="@style/Theme.Transparent" >
         </activity>
         <activity
             android:name="com.BeatGame.Manager.AddUserActivity"
-            android:label="@string/title_activity_game_manager" 
+            android:label="@string/title_activity_game_manager"
             android:screenOrientation="landscape"
-            android:theme="@style/Theme.Transparent">
+            android:theme="@style/Theme.Transparent" >
         </activity>
         <activity
             android:name="com.BeatGame.Manager.ScoreBoardActivity"
-            android:label="@string/title_activity_game_manager" 
+            android:label="@string/title_activity_game_manager"
             android:screenOrientation="landscape"
-            android:theme="@style/Theme.Transparent">
+            android:theme="@style/Theme.Transparent" >
         </activity>
     </application>
 

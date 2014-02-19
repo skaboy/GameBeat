@@ -1,10 +1,8 @@
 package com.BeatGame.Manager;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URLEncoder;
 import java.util.UUID;
 
 import org.apache.http.HttpResponse;
@@ -24,6 +22,7 @@ import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RadioButton;
@@ -34,14 +33,14 @@ import com.BeatGame.Database.DatabaseHandler;
 import com.BeatGame.Database.User;
 import com.BeatGame.Management.R;
 
-/**
- * Created by Franck on 07/02/14.
- */
 public class SetupManager extends Activity {
-	
-	public enum level{easy, normal, hard};
+
+	public enum level {
+		easy, normal, hard
+	};
+
 	private final String SCORE_TEXT = "BEST SCORE";
-	public static final String BASE_URL="http://gamebeat.net46.net/api/function.php";
+	public static final String BASE_URL = "http://gamebeat.net46.net/api/function.php";
 	private RadioGroup radioLevel;
 	private RadioButton radio;
 	private TextView score, username;
@@ -54,90 +53,92 @@ public class SetupManager extends Activity {
 
 	public void onCreate(Bundle savedInstanceState) {
 
-        //SceneTest sc = new SceneTest(this); // Some Debug, let it comment
-
 		super.onCreate(savedInstanceState);
+		//Remove title bar
+	    this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.setup_manager);
 
-		radioLevel= (RadioGroup) findViewById(R.id.radioLevel);
+		radioLevel = (RadioGroup) findViewById(R.id.radioLevel);
 		Button start = (Button) findViewById(R.id.start);
 		start.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				int selectedId = radioLevel.getCheckedRadioButtonId();
-				 
-				// find the radiobutton by returned id
-			        radio = (RadioButton) findViewById(selectedId);
-			        Intent intent = new Intent(SetupManager.this,GameManager.class);
-			        if(radio.getText().equals("Easy")){
-			        	intent.putExtra("level", level.easy.toString());
-			        }
-			        else if(radio.getText().equals("Normal")){
-			        	intent.putExtra("level", level.normal.toString());
-			        }else if(radio.getText().equals("Hard")){
-			        	intent.putExtra("level", level.hard.toString());
-			        }
-			        startActivityForResult(intent,1);
+				radio = (RadioButton) findViewById(selectedId);
+				Intent intent = new Intent(SetupManager.this, GameManager.class);
+				if (radio.getText().equals("EASY")) {
+					intent.putExtra("level", level.easy.toString().toLowerCase());
+				} else if (radio.getText().equals("NORMAL")) {
+					intent.putExtra("level", level.normal.toString().toLowerCase());
+				} else if (radio.getText().equals("HARD")) {
+					intent.putExtra("level", level.hard.toString().toLowerCase());
+				}
+				startActivityForResult(intent, 1);
 			}
 		});
-		
+
 		score = (TextView) findViewById(R.id.score);
 		username = (TextView) findViewById(R.id.username);
-		
+
 		// Database
 		db = new DatabaseHandler(this);
 		user = db.getUser();
-		if (user == null){
+		if (user == null) {
 			username.setText("NO NAME");
-		}else{
+		} else {
 			username.setText(user.getName());
-			score.setText(SCORE_TEXT+": "+user.getScore());
+			score.setText(SCORE_TEXT + ": " + user.getScore());
 			currentScore = user.getScore();
 		}
-		
+
 		addUser = (Button) findViewById(R.id.add_user);
-		if(user!=null) addUser.setBackgroundResource(R.drawable.edit);
-		
+		if (user != null)
+			addUser.setBackgroundResource(R.drawable.edit);
+
 		addUser.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				if(user==null){
-					Intent intent = new Intent(SetupManager.this,AddUserActivity.class);
-					intent.putExtra("score", currentScore+"");
+				if (user == null) {
+					Intent intent = new Intent(SetupManager.this,
+							AddUserActivity.class);
+					intent.putExtra("score", currentScore + "");
 					intent.putExtra("uuid", generateUIID());
 					intent.putExtra("purpose", "add");
-					startActivityForResult(intent,2);
-				}else{
-					Intent intent = new Intent(SetupManager.this,AddUserActivity.class);
+					startActivityForResult(intent, 2);
+				} else {
+					Intent intent = new Intent(SetupManager.this,
+							AddUserActivity.class);
 					intent.putExtra("username", user.getName());
-					intent.putExtra("score", currentScore+"");
+					intent.putExtra("score", currentScore + "");
 					intent.putExtra("uuid", user.getUUID());
 					intent.putExtra("purpose", "edit");
-					startActivityForResult(intent,3);
+					startActivityForResult(intent, 3);
 				}
 			}
 		});
-		
+
 		scoreBoard = (Button) findViewById(R.id.score_board);
 		scoreBoard.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				Intent intent = new Intent(SetupManager.this,ScoreBoardActivity.class);
+				Intent intent = new Intent(SetupManager.this,
+						ScoreBoardActivity.class);
 				startActivity(intent);
 			}
 		});
-		
+
 	}
-	
+
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-		if(data == null) return;
-		
+		if (data == null)
+			return;
+
 		if (requestCode == 1) {
 
 			if (resultCode == RESULT_OK) { // Edit best score
@@ -159,21 +160,26 @@ public class SetupManager extends Activity {
 					}
 
 				}
-				
-				if(data.getStringExtra("status")!=null){
-					if(data.getStringExtra("status").equals("gameover")){
+
+				if (data.getStringExtra("status") != null) {
+					if (data.getStringExtra("status").equals("gameover")) {
 						// custom dialog
 						final Dialog dialog = new Dialog(this);
 						dialog.setContentView(R.layout.dialog_layout);
 						dialog.setTitle("GAME OVER");
-			 
-						// set the custom dialog components - text, image and button
-						TextView text = (TextView) dialog.findViewById(R.id.text);
-						text.setText("Your Score: "+data.getLongExtra("score", 0));
-						ImageView image = (ImageView) dialog.findViewById(R.id.image);
+
+						// set the custom dialog components - text, image and
+						// button
+						TextView text = (TextView) dialog
+								.findViewById(R.id.text);
+						text.setText("Your Score: "
+								+ data.getLongExtra("score", 0));
+						ImageView image = (ImageView) dialog
+								.findViewById(R.id.image);
 						image.setImageResource(R.drawable.score_ball);
-			 
-						Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
+
+						Button dialogButton = (Button) dialog
+								.findViewById(R.id.dialogButtonOK);
 						// if button is clicked, close the custom dialog
 						dialogButton.setOnClickListener(new OnClickListener() {
 							@Override
@@ -181,26 +187,26 @@ public class SetupManager extends Activity {
 								dialog.dismiss();
 							}
 						});
-			 
+
 						dialog.show();
 					}
 				}
 			}
 
-		}else if(requestCode == 2){	// Add new user with currentScore
+		} else if (requestCode == 2) { // Add new user with currentScore
 			if (resultCode == RESULT_OK) {
 				usernameString = data.getStringExtra("username");
 				username.setText(usernameString);
-				
+
 				user = new User();
 				user.setName(usernameString);
 				user.setScore(currentScore);
 				user.setUUID(generateUIID());
 				db.addUser(user);
 				addUser.setBackgroundResource(R.drawable.edit);
-				
+
 			}
-		}else if(requestCode == 3){	// Edit existing username
+		} else if (requestCode == 3) { // Edit existing username
 			usernameString = data.getStringExtra("username");
 			username.setText(usernameString);
 			user.setName(usernameString);
@@ -208,33 +214,31 @@ public class SetupManager extends Activity {
 		}
 	}
 
-
-	public String generateUIID(){
+	public String generateUIID() {
 		String android_id = Secure.getString(getApplicationContext()
-	            .getContentResolver(), Secure.ANDROID_ID);
-	    Log.i("System out", "android_id : " + android_id);
+				.getContentResolver(), Secure.ANDROID_ID);
+		Log.i("System out", "android_id : " + android_id);
 
-	    final TelephonyManager tm = (TelephonyManager) getBaseContext()
-	            .getSystemService(Context.TELEPHONY_SERVICE);
+		final TelephonyManager tm = (TelephonyManager) getBaseContext()
+				.getSystemService(Context.TELEPHONY_SERVICE);
 
-	    final String tmDevice, tmSerial, androidId;
-	    tmDevice = "" + tm.getDeviceId();
-	    Log.i("System out", "tmDevice : " + tmDevice);
-	    tmSerial = "" + tm.getSimSerialNumber();
-	    Log.i("System out", "tmSerial : " + tmSerial);
-	    androidId = ""
-	            + android.provider.Settings.Secure.getString(
-	                    getContentResolver(),
-	                    android.provider.Settings.Secure.ANDROID_ID);
+		final String tmDevice, tmSerial, androidId;
+		tmDevice = "" + tm.getDeviceId();
+		Log.i("System out", "tmDevice : " + tmDevice);
+		tmSerial = "" + tm.getSimSerialNumber();
+		Log.i("System out", "tmSerial : " + tmSerial);
+		androidId = ""
+				+ android.provider.Settings.Secure.getString(
+						getContentResolver(),
+						android.provider.Settings.Secure.ANDROID_ID);
 
-	    UUID deviceUuid = new UUID(androidId.hashCode(), ((long) tmDevice
-	            .hashCode() << 32)
-	            | tmSerial.hashCode());
-	    String UUID = deviceUuid.toString();
-	    Log.i("System out", "UUID : " + UUID);
-	    return UUID;
+		UUID deviceUuid = new UUID(androidId.hashCode(),
+				((long) tmDevice.hashCode() << 32) | tmSerial.hashCode());
+		String UUID = deviceUuid.toString();
+		Log.i("System out", "UUID : " + UUID);
+		return UUID;
 	}
-	
+
 	public static String readTextFromServer(String urlStr) {
 		try {
 
@@ -264,14 +268,12 @@ public class SetupManager extends Activity {
 		}
 		return "";
 	}
-	
+
 	public class ServerThread extends AsyncTask<String, Void, String> {
 		@Override
 		protected void onPostExecute(String result) {
 			// TODO Auto-generated method stub
 			super.onPostExecute(result);
-			Log.e("=======> From server: ","Server: "+result);
-			
 		}
 
 		@Override
@@ -282,7 +284,7 @@ public class SetupManager extends Activity {
 
 		@Override
 		protected String doInBackground(String... params) {
-			Log.e("URL",params[0]);
+			Log.e("URL", params[0]);
 			return SetupManager.readTextFromServer(params[0]);
 		}
 	}

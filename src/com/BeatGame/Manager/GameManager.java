@@ -1,7 +1,5 @@
 package com.BeatGame.Manager;
 
-import static java.lang.System.currentTimeMillis;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -16,16 +14,15 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.BeatGame.Animation.MyAnimationView;
 import com.BeatGame.Component.BeatButton;
-import com.BeatGame.Component.ButtonManager;
 import com.BeatGame.Component.Position;
 import com.BeatGame.Management.R;
 import com.BeatGame.UI.Scene;
@@ -35,10 +32,8 @@ public class GameManager extends Activity {
 	final int SCORE_PER_CLICK = 10;
 	
 	// Speed of the game
-	private int speed;
-	private String level; // SetupManager.level should be an enum
+	private String level; 
 	private long score = 0;
-	private long GameFactor = 100;
 	private int levelRank = 0;
 
 	private Button pauseButton;
@@ -64,6 +59,8 @@ public class GameManager extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		//Remove title bar
+	    this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.game_manager);
 		Intent intent = getIntent();
 		level = intent.getStringExtra("level");
@@ -79,7 +76,6 @@ public class GameManager extends Activity {
        
 		buttonManager = new ButtonManager(this);
 		sceneManager = new Scene(this, 800, 800);
-
 		exitGame = false;
 		isOnPause = false;
 		
@@ -87,9 +83,11 @@ public class GameManager extends Activity {
 		getWindowManager().getDefaultDisplay().getMetrics(metrics);
 		screenHeight = metrics.heightPixels;
 		screenWidth = metrics.widthPixels;
-
 		gameManager = this;
-
+		
+		// play music
+		mBackgroundSound.execute();
+		
 		restartGame();
 		
 		pauseButton = (Button) findViewById(R.id.startButton);
@@ -99,13 +97,11 @@ public class GameManager extends Activity {
 				// TODO Auto-generated method stub
 				Intent myIntent = new Intent(GameManager.this,
 						PauseActivity.class);
-				// myIntent.putExtra("key", value); //Optional parameters
 				startActivity(myIntent);
 			}
 		});
 		
-		// play music
-		mBackgroundSound.execute();
+		
 	
 	}
 
@@ -192,7 +188,7 @@ public class GameManager extends Activity {
 
 		// reset index button to be clicked
 		indexButtonToBeClicked = 0;
-
+		
 		// remove animation view
 		for (int i = 0; i < container.getChildCount(); i++) {
 			if (container.getChildAt(i) instanceof MyAnimationView)
@@ -282,6 +278,7 @@ public class GameManager extends Activity {
 
 	private class CircleListener extends AsyncTask<Object, Void, BeatButton> {
 	
+		boolean exceptionOnPause = false;
 		@Override
 		protected BeatButton doInBackground(Object... btns) {
 
@@ -293,10 +290,9 @@ public class GameManager extends Activity {
 			}
 
 			synchronized (this) {
-				Log.e("THREAD PAUSE =========> : ", "" + isOnPause);
 				if (isOnPause) {
-					// Log.e("=========> : ", "ON PAUSE");
 					try {
+						exceptionOnPause = true; // when pause, we don't take substract the life.
 						wait();
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
@@ -310,24 +306,26 @@ public class GameManager extends Activity {
 
 		@Override
 		protected void onPostExecute(BeatButton btn) {
-				if(life == 3){
-					life1.setImageResource(R.drawable.life_left);
-					life --;
-					restartGame();
-				}else if(life == 2){
-					life2.setImageResource(R.drawable.life_left);
-					life --;
-					restartGame();
-				}else if(life == 1){	// Game over
-					life3.setImageResource(R.drawable.life_left);
-					life --;
-					Intent returnIntent = new Intent();
-					returnIntent.putExtra("score", score);
-					returnIntent.putExtra("status", "gameover");
-					setResult(RESULT_OK, returnIntent);
-					finish();
-				}
-				
+			if(!exceptionOnPause){
+					if(life == 3){
+						life1.setImageResource(R.drawable.life_left);
+						life --;
+						restartGame();
+					}else if(life == 2){
+						life2.setImageResource(R.drawable.life_left);
+						life --;
+						restartGame();
+					}else if(life == 1){	// Game over
+						life3.setImageResource(R.drawable.life_left);
+						life --;
+						Intent returnIntent = new Intent();
+						returnIntent.putExtra("score", score);
+						returnIntent.putExtra("status", "gameover");
+						setResult(RESULT_OK, returnIntent);
+						finish();
+					}
+			}
+			restartGame();
 		}
 	}
 	
@@ -343,15 +341,4 @@ public class GameManager extends Activity {
 	        return null;
 	    }
 	}
-	
-	private long calculateScoreFromClick(BeatButton b, long clickTime){
-        // clickTime is the curentTimeInMs to know how fast was the click from the start
-        // we calculate how fast and according to the percentage we give point
-        long duration = b.circle ().duration();
-        long delta =  (long)(currentTimeMillis() - b.circle().startTime());
-        //long delta =  clickTime - b.circle().startTime()); // to uncomment when implemented
-
-        // 10 - %reaction%
-        return 10 - (delta*100 / duration);
-    }
 }

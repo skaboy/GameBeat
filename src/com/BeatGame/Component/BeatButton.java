@@ -13,14 +13,10 @@ public class BeatButton extends Button{
 
 	public BeatButton(Context context, int id, int size, Position position, Circle circle) {
 
-        // TODO : size need to be calculate according to the given picture
-        // or we have to agree that all the used picture have the same size and define constant when this
-        // constructor is called.
         super(context);
 		this.id = id;
 		this.size = size;
 		this.position = position;
-		//this.image = image; // should provide default image
 		this.circle = circle;
 	}
 

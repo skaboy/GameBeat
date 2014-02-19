@@ -22,7 +22,6 @@ public class Scene implements SceneInterface {
 	Context context;
 	HashMap<BeatButton, Position> buttonsMap = new HashMap<BeatButton, Position>();
 
-	// @ctor
 	public Scene(Context ctx, int h, int w) {
 		width = w;
 		height = h;
@@ -80,7 +79,6 @@ public class Scene implements SceneInterface {
 
 	private boolean isOverlapping(BeatButton b) {
 		// calculus : check two centers
-
 		boolean overlap = false;
 		Position p = b.position();
 		Position pos;
@@ -121,7 +119,6 @@ public class Scene implements SceneInterface {
 			RelativeLayout layout, String text) {
 
 		RelativeLayout.LayoutParams params;
-
 		button.setText(text);
 		button.setTextColor(Color.WHITE);
 		button.setBackgroundDrawable(context.getResources().getDrawable(
@@ -140,7 +137,6 @@ public class Scene implements SceneInterface {
 			layout.removeView(button);
 			buttonsMap.remove(button);
 			if (buttonsMap.size() == 0) {
-				Log.e("Restart GAME ======> : ", "RESTart game");
 				GameManager.gameManager.restartGame();
 			}
 

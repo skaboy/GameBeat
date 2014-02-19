@@ -12,9 +12,6 @@ import android.widget.EditText;
 
 import com.BeatGame.Management.R;
 
-/**
- * Created by Franck on 07/02/14.
- */
 public class AddUserActivity extends Activity {
 
 	EditText username;
@@ -72,7 +69,7 @@ public class AddUserActivity extends Activity {
 		protected void onPostExecute(String result) {
 			// TODO Auto-generated method stub
 			super.onPostExecute(result);
-			Log.e("=======> From server: ","Server: "+result);
+			Log.e("=======> From server: ", "Server: " + result);
 			Intent returnIntent = new Intent();
 			returnIntent.putExtra("username", username.getText().toString());
 			setResult(RESULT_OK, returnIntent);
@@ -87,7 +84,7 @@ public class AddUserActivity extends Activity {
 
 		@Override
 		protected String doInBackground(String... params) {
-			Log.e("URL",params[0]);
+			Log.e("URL", params[0]);
 			return SetupManager.readTextFromServer(params[0]);
 		}
 	}
