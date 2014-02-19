@@ -52,16 +52,7 @@ public class SetupManager extends Activity {
 		});
 		
 		
-		Button exit= (Button) findViewById(R.id.exit);
-		exit.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				//Exit the application
-				finish();
-				
-			}
-		});
+		
 	}
 	
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {

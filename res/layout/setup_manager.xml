@@ -7,7 +7,7 @@
     android:orientation="vertical"
     android:layout_gravity="center_vertical"
     android:gravity="center" 
-    android:background="@android:color/background_light">
+    android:background="@drawable/main_background">
  
     <TextView
         android:id="@+id/levelLabel"
@@ -15,6 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
          android:text="LEVEL"
+         android:textColor="@android:color/white"
          android:gravity="center_horizontal"
          android:textSize="20dp">
     </TextView>
@@ -25,6 +26,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_marginBottom="20dp"
+        
         >
  
         <RadioButton
@@ -34,6 +36,7 @@
             android:text="Easy"
             android:checked="true"
             android:layout_margin="10dp"
+            android:textColor="@android:color/white"
          />
  
         <RadioButton
@@ -41,14 +44,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Normal"
-            android:layout_margin="10dp"/>
+            android:layout_margin="10dp"
+            android:textColor="@android:color/white"/>
         
         <RadioButton
             android:id="@+id/radioHard"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Hard"
-            android:layout_margin="10dp"/>
+            android:layout_margin="10dp"
+            android:textColor="@android:color/white"/>
  
     </RadioGroup>
    
@@ -58,15 +63,11 @@
         android:layout_height="wrap_content"
         android:text="Start"
         android:layout_marginBottom="15dp"
+        android:background="@drawable/main_play"
+        android:textColor="@android:color/white"
         />
  
-    <Button
-        android:id="@+id/exit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Exit"
-        android:layout_marginBottom="15dp"
-        />
+
     
  </LinearLayout>
 

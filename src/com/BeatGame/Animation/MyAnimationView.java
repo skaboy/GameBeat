@@ -26,7 +26,7 @@ import com.nineoldandroids.animation.ValueAnimator;
 public class MyAnimationView extends View implements ValueAnimator.AnimatorUpdateListener {
 
         private static final float BALL_SIZE = 100f;
-        private static final int DURATION = 4500;
+        private static final int DURATION = 5000;
 
         public ArrayList<ShapeHolder> balls = new ArrayList<ShapeHolder>();
         ArrayList<Animator> listAnimator;

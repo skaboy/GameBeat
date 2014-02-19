@@ -90,6 +90,26 @@ public class GameManager extends Activity {
 		
 		// play music
 		mBackgroundSound.execute();
+		
+		/*Thread backgroundAnimation = new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				while(true){
+					// background animation
+					GameManager.this.runOnUiThread(new Runnable() {
+					    public void run() {
+					    	TransitionDrawable transition = (TransitionDrawable) container.getBackground();
+							transition.startTransition(1000);
+					    }
+					});
+					
+				}
+			}
+		});
+		backgroundAnimation.start();*/
+	
 	}
 
 	@Override
