@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -44,6 +45,8 @@ public class GameManager extends Activity {
 	private ButtonManager buttonManager;
 	private Scene sceneManager;
 	private RelativeLayout container;
+    private Button scoreLabel;
+    private ProgressBar lifebar;
 
 	public static GameManager gameManager;
 	private CircleListener threadsListener;
@@ -63,6 +66,9 @@ public class GameManager extends Activity {
 		Intent intent = getIntent();
 		level = intent.getStringExtra("level");
 		container = (RelativeLayout) findViewById(R.id.container);
+        scoreLabel = (Button) findViewById(R.id.score);
+        lifebar = (ProgressBar) findViewById(R.id.lifebar);
+        lifebar.setProgress(100);
 
 		buttonManager = new ButtonManager(this);
 		sceneManager = new Scene(this, 800, 800);
@@ -163,6 +169,13 @@ public class GameManager extends Activity {
 
 		// reset view
 		sceneManager.clearBeatButtonType(container);
+
+        // User stats
+        if (lifebar.getProgress() == 0){
+            lifebar.setProgress(100);
+            score = 0 ;
+        }
+        scoreLabel.setText(score+"");
 
 		// reset
 		buttonManager.clearButtons();
@@ -289,7 +302,12 @@ public class GameManager extends Activity {
 
 		@Override
 		protected void onPostExecute(BeatButton btn) {
-				restartGame();
+            if (lifebar.getProgress() > 0) {
+                lifebar.setProgress(lifebar.getProgress()-10);
+                restartGame();
+            } else {
+                pauseButton.performClick();
+            }
 		}
 	}
 
